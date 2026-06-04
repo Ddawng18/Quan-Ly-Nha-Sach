@@ -1,0 +1,88 @@
+# ============================================
+# BookStoreApp — .NET 9 WinForms Solution
+# ============================================
+
+# --- Visual Studio / MSBuild ---
+[Bb]in/
+[Oo]bj/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+.vs/
+*.dbmdl
+*.jfm
+*.sln.ide/
+
+# --- NuGet ---
+packages/
+*.nupkg
+# Keep packages.config if present, but prefer PackageReference
+!**/packages.config
+# NuGet lock file
+*.nuget.lock.json
+
+# --- .NET Build Artifacts ---
+*.Cache
+*.dll.config
+*.exe.config
+/appsettings.Development.json
+/appsettings.*.local.json
+
+# --- IDE / Editor ---
+*.swp
+*.*~
+.vscode/
+.idea/
+*.csproj.user
+*.DotSettings.user
+Thumbs.db
+Desktop.ini
+
+# --- Local Databases ---
+*.mdf
+*.ldf
+*.ndf
+*.bak
+App_Data/
+
+# --- Logs ---
+logs/
+*.log
+
+# --- OS Files ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+[Tt]humbs.db
+
+# --- Test Results ---
+TestResults/
+*.trx
+*.coverage
+.coverage/
+coveragereport/
+
+# --- Publish Output ---
+[Pp]ublish/
+[Pp]ublished/
+/app/publish/
+
+# --- Rider ---
+.idea/
+*.sln.iml
+_GhostDoc.xml
+
+# --- Windows Forms Designer ---
+*.Designer.cs.dotsettings
+
+# --- Temporary / Backup ---
+*.tmp
+*.temp
+~$*
+*.orig
+*.original
