@@ -15,6 +15,8 @@ public partial class OrdersControl : UserControl
     public OrdersControl()
     {
         InitializeComponent();
+        dgvOrders.ColumnHeadersVisible = true;        
+        dgvOrderDetails.ColumnHeadersVisible = true; 
         InitializeInvoiceDetailView();
         dtpFrom.Checked = false;
         dtpTo.Checked = false;
@@ -61,10 +63,10 @@ public partial class OrdersControl : UserControl
         dgvOrderDetails.RowHeadersVisible = false;
         dgvOrderDetails.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
-        split.Panel2.Controls.Add(dgvOrderDetails);
+split.Panel2.Controls.Add(dgvOrderDetails);
         split.Panel2.Controls.Add(detailToolbar);
         Controls.Add(split);
-        split.SendToBack();
+        split.BringToFront();
     }
 
     private void ApplyTheme()
@@ -85,6 +87,18 @@ public partial class OrdersControl : UserControl
     {
         dgvOrders.DataSource = GetFilteredOrders().ToList();
         ConfigureGridColumns();
+        SetColumn("OrderID", "OrderID", 80, 0);
+        SetColumn("CustomerID", "CustomerID", 90, 1);
+        SetColumn("CustomerName", "CustomerName", 150, 2);
+        SetColumn("EmployeeID", "EmployeeID", 90, 3);
+        SetColumn("EmployeeName", "EmployeeName", 150, 4);
+        SetColumn("OrderDate", "OrderDate", 120, 5);
+        SetColumn("SubtotalAmount", "Subtotal", 100, 6);
+        SetColumn("DiscountAmount", "Discount", 100, 7);
+        SetColumn("TaxAmount", "Tax", 90, 8);
+        SetColumn("TotalAmount", "TotalAmount", 110, 9);
+        SetColumn("PaymentMethod", "PaymentMethod", 120, 10);
+        SetColumn("PaymentStatus", "PaymentStatus", 110, 11);
     }
 
     private IEnumerable<OrderViewDto> GetFilteredOrders()
@@ -128,18 +142,7 @@ public partial class OrdersControl : UserControl
             return;
         }
 
-        SetColumn("OrderID", "OrderID", 80, 0);
-        SetColumn("CustomerID", "CustomerID", 90, 1);
-        SetColumn("CustomerName", "CustomerName", 150, 2);
-        SetColumn("EmployeeID", "EmployeeID", 90, 3);
-        SetColumn("EmployeeName", "EmployeeName", 150, 4);
-        SetColumn("OrderDate", "OrderDate", 120, 5);
-        SetColumn("SubtotalAmount", "Subtotal", 100, 6);
-        SetColumn("DiscountAmount", "Discount", 100, 7);
-        SetColumn("TaxAmount", "Tax", 90, 8);
-        SetColumn("TotalAmount", "TotalAmount", 110, 9);
-        SetColumn("PaymentMethod", "PaymentMethod", 120, 10);
-        SetColumn("PaymentStatus", "PaymentStatus", 110, 11);
+        
 
         if (dgvOrders.Columns["OrderDate"] is DataGridViewColumn orderDate)
         {
