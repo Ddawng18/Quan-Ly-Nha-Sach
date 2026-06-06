@@ -81,7 +81,7 @@ BookStoreApp là ứng dụng desktop quản lý nhà sách với đầy đủ t
 
 ## Cấu trúc project
 
-```
+
 BookStoreApp.sln
 ├── DTO/                          # Data Transfer Objects (Models, Enums)
 │   ├── Books/                    # Book, BookViewDto, BookFilter, StockLevelFilter
@@ -122,13 +122,13 @@ BookStoreApp.sln
 │   └── BookStoreApp.csproj
 │
 └── README.md                     # Tài liệu này
-```
+
 
 ---
 
 ## Kiến trúc
 
-```
+
 ┌─────────────────────────────────────────────────┐
 │  WinForms UI (Forms + UserControls)              │
 │  Lấy service từ ServiceLocator                   │
@@ -143,7 +143,7 @@ BookStoreApp.sln
 ├─────────────────────────────────────────────────┤
 │  Utilities (FileLogger, ReportExporter)          │
 └─────────────────────────────────────────────────┘
-```
+
 
 **Dependency Injection** được thực hiện thủ công qua `ServiceLocator` trong `BookStoreApp/ServiceLocator.cs`. Tất cả UI controls lấy service từ đây thay vì tự khởi tạo.
 
