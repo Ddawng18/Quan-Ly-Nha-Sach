@@ -83,45 +83,45 @@ BookStoreApp là ứng dụng desktop quản lý nhà sách với đầy đủ t
 
 ```
 BookStoreApp.sln
-├── DTO/                          # Data Transfer Objects (Models, Enums)
-│   ├── Books/                    # Book, BookViewDto, BookFilter, StockLevelFilter
-│   ├── Customers/                # Customer, CustomerPurchaseDto
-│   ├── Employees/                # Employee
-│   ├── Orders/                   # Order, OrderViewDto, OrderDetail, OrderStatus
-│   ├── POS/                      # CartLine, CartTotals, CheckoutRequest, CheckoutResult, DiscountType
-│   ├── Payments/                 # PaymentConfig, PaymentStatus
-│   ├── Reports/                  # ReportRowDto, ReportSectionDto
-│   ├── Dashboard/                # DashboardMetricDto, BestSellingBookDto
-│   ├── Category/, Supplier/      # Category & Supplier entities
+├── DTO/                          
+│   ├── Books/                    
+│   ├── Customers/                
+│   ├── Employees/                
+│   ├── Orders/                   
+│   ├── POS/                      
+│   ├── Payments/                 
+│   ├── Reports/                  
+│   ├── Dashboard/                
+│   ├── Category/, Supplier/      
 │   └── BookStoreApp.DTO.csproj
 │
-├── DAL/                          # Data Access Layer
-│   ├── Interfaces/               # IBookRepository, ICustomerRepository, IOrderRepository, ...
-│   ├── Repositories/             # SQL Server implementations (ADO.NET)
-│   ├── DbConnectionFactory.cs    # SqlConnection factory
+├── DAL/                          
+│   ├── Interfaces/               
+│   ├── Repositories/             
+│   ├── DbConnectionFactory.cs    
 │   └── BookStoreApp.DAL.csproj
 │
-├── BLL/                          # Business Logic Layer
-│   ├── *Service.cs               # BookService, CustomerService, OrderService, PosService, ...
-│   ├── I*Service.cs              # Interfaces
-│   ├── Payments/                 # DemoPaymentProvider, MomoPaymentProvider, VNPayPaymentProvider
+├── BLL/                          
+│   ├── *Service.cs               
+│   ├── I*Service.cs              
+│   ├── Payments/                 
 │   └── BookStoreApp.BLL.csproj
 │
-├── Utilities/                    # Tiện ích chung
-│   ├── FileLogger.cs             # Ghi log file
-│   ├── ReportExporter.cs         # Xuất báo cáo CSV
+├── Utilities/                    
+│   ├── FileLogger.cs             
+│   ├── ReportExporter.cs         
 │   └── BookStoreApp.Utilities.csproj
 │
-├── BookStoreApp/                 # WinForms UI
-│   ├── Forms/                    # LoginForm, MainForm, PosForm, OrderCreateForm, BookEditForm, PaymentQRForm, ...
-│   ├── UserControls/             # DashboardControl, BookControl, OrdersControl, ReportsControl, ...
-│   ├── Theme/                    # AppBranding, AppTheme
-│   ├── ServiceLocator.cs         # Manual Dependency Injection
-│   ├── Program.cs                # Entry point
-│   ├── appsettings.json          # Connection string + Payment config
+├── BookStoreApp/                 
+│   ├── Forms/                    
+│   ├── UserControls/             
+│   ├── Theme/                    
+│   ├── ServiceLocator.cs         
+│   ├── Program.cs                
+│   ├── appsettings.json          
 │   └── BookStoreApp.csproj
 │
-└── README.md                     # Tài liệu này
+└── README.md                     
 ```
 
 ---
