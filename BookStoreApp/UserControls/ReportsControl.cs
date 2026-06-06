@@ -13,9 +13,6 @@ namespace BookStoreApp.UserControls;
 public partial class ReportsControl : UserControl
 {
     private readonly IReportService _reportService = ServiceLocator.ReportService;
-    private PlotView plotView = new();
-    private NumericUpDown numTopN = new();
-    private NumericUpDown numLowStockThreshold = new();
 
     private static readonly (string Label, Func<IReportService, ReportSectionDto> Factory)[] ReportTypes =
     [
@@ -31,59 +28,17 @@ public partial class ReportsControl : UserControl
     public ReportsControl()
     {
         InitializeComponent();
-        InitializeAnalyticsControls();
         cboReportType.Items.AddRange(ReportTypes.Select(r => r.Label).Cast<object>().ToArray());
         if (cboReportType.Items.Count > 0)
         {
             cboReportType.SelectedIndex = 0;
         }
 
+        numTopN.ValueChanged += (_, _) => LoadReports();
+        numLowStockThreshold.ValueChanged += (_, _) => LoadReports();
+
         ApplyTheme();
         LoadReports();
-    }
-
-    private void InitializeAnalyticsControls()
-    {
-        Controls.Remove(dgvReports);
-
-        var split = new SplitContainer
-        {
-            Dock = DockStyle.Fill,
-            Orientation = Orientation.Horizontal,
-            SplitterDistance = 210
-        };
-
-        plotView.Dock = DockStyle.Fill;
-        split.Panel1.Controls.Add(plotView);
-        dgvReports.Dock = DockStyle.Fill;
-        split.Panel2.Controls.Add(dgvReports);
-        Controls.Add(split);
-        split.SendToBack();
-
-        panelToolbar.Height = 88;
-        panelToolbar.Controls.Add(new Label { AutoSize = true, Text = "Top N", Location = new Point(11, 56) });
-        numTopN = new NumericUpDown
-        {
-            Location = new Point(67, 52),
-            Size = new Size(80, 27),
-            Minimum = 1,
-            Maximum = 100,
-            Value = 10
-        };
-        numTopN.ValueChanged += (_, _) => LoadReports();
-        panelToolbar.Controls.Add(numTopN);
-
-        panelToolbar.Controls.Add(new Label { AutoSize = true, Text = "Low Stock <=", Location = new Point(166, 56) });
-        numLowStockThreshold = new NumericUpDown
-        {
-            Location = new Point(268, 52),
-            Size = new Size(80, 27),
-            Minimum = 0,
-            Maximum = 1000,
-            Value = 10
-        };
-        numLowStockThreshold.ValueChanged += (_, _) => LoadReports();
-        panelToolbar.Controls.Add(numLowStockThreshold);
     }
 
     private void ApplyTheme()

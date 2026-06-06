@@ -107,6 +107,12 @@
     <Compile Update="Forms\OrderCreateForm.Designer.cs">
       <DependentUpon>OrderCreateForm.cs</DependentUpon>
     </Compile>
+    <Compile Update="Forms\PosForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\PosForm.Designer.cs">
+      <DependentUpon>PosForm.cs</DependentUpon>
+    </Compile>
     <Compile Update="Forms\CategoryEditForm.cs">
       <SubType>Form</SubType>
     </Compile>

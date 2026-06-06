@@ -22,6 +22,9 @@ partial class BookControl
         btnRefresh = new Button();
         txtSearch = new TextBox();
         btnSearch = new Button();
+        cboCategoryFilter = new ComboBox();
+        cboPublisherFilter = new ComboBox();
+        cboStockFilter = new ComboBox();
         dgvBooks = new DataGridView();
         panelToolbar.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)dgvBooks).BeginInit();
@@ -35,11 +38,14 @@ partial class BookControl
         panelToolbar.Controls.Add(btnDelete);
         panelToolbar.Controls.Add(btnEdit);
         panelToolbar.Controls.Add(btnAdd);
+        panelToolbar.Controls.Add(cboStockFilter);
+        panelToolbar.Controls.Add(cboPublisherFilter);
+        panelToolbar.Controls.Add(cboCategoryFilter);
         panelToolbar.Dock = DockStyle.Top;
         panelToolbar.Location = new Point(8, 8);
         panelToolbar.Name = "panelToolbar";
         panelToolbar.Padding = new Padding(0, 0, 0, 8);
-        panelToolbar.Size = new Size(784, 48);
+        panelToolbar.Size = new Size(784, 92);
         panelToolbar.TabIndex = 0;
         //
         // btnAdd
@@ -98,6 +104,30 @@ partial class BookControl
         btnSearch.UseVisualStyleBackColor = true;
         btnSearch.Click += btnSearch_Click;
         //
+        // cboCategoryFilter
+        //
+        cboCategoryFilter.DropDownStyle = ComboBoxStyle.DropDownList;
+        cboCategoryFilter.Location = new Point(0, 52);
+        cboCategoryFilter.Name = "cboCategoryFilter";
+        cboCategoryFilter.Size = new Size(180, 28);
+        cboCategoryFilter.TabIndex = 6;
+        //
+        // cboPublisherFilter
+        //
+        cboPublisherFilter.DropDownStyle = ComboBoxStyle.DropDownList;
+        cboPublisherFilter.Location = new Point(188, 52);
+        cboPublisherFilter.Name = "cboPublisherFilter";
+        cboPublisherFilter.Size = new Size(180, 28);
+        cboPublisherFilter.TabIndex = 7;
+        //
+        // cboStockFilter
+        //
+        cboStockFilter.DropDownStyle = ComboBoxStyle.DropDownList;
+        cboStockFilter.Location = new Point(376, 52);
+        cboStockFilter.Name = "cboStockFilter";
+        cboStockFilter.Size = new Size(140, 28);
+        cboStockFilter.TabIndex = 8;
+        //
         // dgvBooks
         //
         dgvBooks.AllowUserToAddRows = false;
@@ -133,5 +163,8 @@ partial class BookControl
     private Button btnRefresh;
     private TextBox txtSearch;
     private Button btnSearch;
+    private ComboBox cboCategoryFilter;
+    private ComboBox cboPublisherFilter;
+    private ComboBox cboStockFilter;
     private DataGridView dgvBooks;
 }

@@ -11,7 +11,6 @@ public partial class EmployeeEditForm : Form
     public EmployeeEditForm()
     {
         InitializeComponent();
-        cboRole.Items.AddRange(["Admin", "Staff"]);
         cboRole.SelectedItem = "Staff";
         Text = "Add Employee";
     }

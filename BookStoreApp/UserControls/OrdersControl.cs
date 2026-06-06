@@ -8,65 +8,22 @@ namespace BookStoreApp.UserControls;
 public partial class OrdersControl : UserControl
 {
     private readonly IOrderService _orderService = ServiceLocator.OrderService;
-    private DataGridView dgvOrderDetails = new();
-    private ComboBox cboNewStatus = new();
-    private Button btnUpdateStatus = new();
 
     public OrdersControl()
     {
         InitializeComponent();
-        dgvOrders.ColumnHeadersVisible = true;        
-        dgvOrderDetails.ColumnHeadersVisible = true; 
-        InitializeInvoiceDetailView();
+        dgvOrders.ColumnHeadersVisible = true;
+        dgvOrderDetails.ColumnHeadersVisible = true;
         dtpFrom.Checked = false;
         dtpTo.Checked = false;
         cboPaymentStatus.Items.AddRange(["All", OrderStatus.Paid, OrderStatus.Pending, OrderStatus.Cancelled]);
         cboPaymentStatus.SelectedIndex = 0;
         cboNewStatus.Items.AddRange(OrderStatus.All.Cast<object>().ToArray());
         cboNewStatus.SelectedItem = OrderStatus.Paid;
+        dgvOrders.SelectionChanged += dgvOrders_SelectionChanged;
+        btnUpdateStatus.Click += btnUpdateStatus_Click;
         ApplyTheme();
         LoadOrders();
-    }
-
-    private void InitializeInvoiceDetailView()
-    {
-        Controls.Remove(dgvOrders);
-
-        var split = new SplitContainer
-        {
-            Dock = DockStyle.Fill,
-            Orientation = Orientation.Horizontal,
-            SplitterDistance = 300
-        };
-
-        dgvOrders.Dock = DockStyle.Fill;
-        dgvOrders.SelectionChanged += dgvOrders_SelectionChanged;
-        split.Panel1.Controls.Add(dgvOrders);
-
-        var detailToolbar = new Panel { Dock = DockStyle.Top, Height = 44 };
-        detailToolbar.Controls.Add(new Label { AutoSize = true, Text = "Set Status", Location = new Point(0, 12) });
-        cboNewStatus.DropDownStyle = ComboBoxStyle.DropDownList;
-        cboNewStatus.Location = new Point(80, 8);
-        cboNewStatus.Size = new Size(120, 28);
-        detailToolbar.Controls.Add(cboNewStatus);
-        btnUpdateStatus.Text = "Update";
-        btnUpdateStatus.Location = new Point(212, 4);
-        btnUpdateStatus.Size = new Size(88, 36);
-        btnUpdateStatus.Click += btnUpdateStatus_Click;
-        detailToolbar.Controls.Add(btnUpdateStatus);
-
-        dgvOrderDetails.AllowUserToAddRows = false;
-        dgvOrderDetails.AllowUserToDeleteRows = false;
-        dgvOrderDetails.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-        dgvOrderDetails.Dock = DockStyle.Fill;
-        dgvOrderDetails.ReadOnly = true;
-        dgvOrderDetails.RowHeadersVisible = false;
-        dgvOrderDetails.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-
-split.Panel2.Controls.Add(dgvOrderDetails);
-        split.Panel2.Controls.Add(detailToolbar);
-        Controls.Add(split);
-        split.BringToFront();
     }
 
     private void ApplyTheme()
@@ -142,8 +99,6 @@ split.Panel2.Controls.Add(dgvOrderDetails);
             return;
         }
 
-        
-
         if (dgvOrders.Columns["OrderDate"] is DataGridViewColumn orderDate)
         {
             orderDate.DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
@@ -180,7 +135,7 @@ split.Panel2.Controls.Add(dgvOrderDetails);
 
     private void btnCreate_Click(object sender, EventArgs e)
     {
-        using var form = new OrderCreateForm();
+        using var form = new PosForm();
         if (form.ShowDialog(FindForm()) == DialogResult.OK)
         {
             LoadOrders();

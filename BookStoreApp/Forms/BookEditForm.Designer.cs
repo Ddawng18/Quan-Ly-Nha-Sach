@@ -29,6 +29,10 @@ partial class BookEditForm
         numImportPrice = new NumericUpDown();
         lblSellPrice = new Label();
         numSellPrice = new NumericUpDown();
+        lblCategory = new Label();
+        cboCategory = new ComboBox();
+        lblSupplier = new Label();
+        cboSupplier = new ComboBox();
         lblQuantity = new Label();
         numQuantity = new NumericUpDown();
         btnSave = new Button();
@@ -98,14 +102,14 @@ partial class BookEditForm
         // lblPublishYear
         //
         lblPublishYear.AutoSize = true;
-        lblPublishYear.Location = new Point(24, 280);
+        lblPublishYear.Location = new Point(24, 340);
         lblPublishYear.Name = "lblPublishYear";
         lblPublishYear.Size = new Size(91, 20);
         lblPublishYear.Text = "Publish Year";
         //
         // numPublishYear
         //
-        numPublishYear.Location = new Point(24, 304);
+        numPublishYear.Location = new Point(24, 364);
         numPublishYear.Maximum = new decimal(new int[] { 2100, 0, 0, 0 });
         numPublishYear.Minimum = new decimal(new int[] { 1900, 0, 0, 0 });
         numPublishYear.Name = "numPublishYear";
@@ -115,7 +119,7 @@ partial class BookEditForm
         // lblImportPrice
         //
         lblImportPrice.AutoSize = true;
-        lblImportPrice.Location = new Point(168, 280);
+        lblImportPrice.Location = new Point(168, 340);
         lblImportPrice.Name = "lblImportPrice";
         lblImportPrice.Size = new Size(89, 20);
         lblImportPrice.Text = "Import Price";
@@ -123,7 +127,7 @@ partial class BookEditForm
         // numImportPrice
         //
         numImportPrice.DecimalPlaces = 2;
-        numImportPrice.Location = new Point(168, 304);
+        numImportPrice.Location = new Point(168, 364);
         numImportPrice.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
         numImportPrice.Name = "numImportPrice";
         numImportPrice.Size = new Size(120, 27);
@@ -131,7 +135,7 @@ partial class BookEditForm
         // lblSellPrice
         //
         lblSellPrice.AutoSize = true;
-        lblSellPrice.Location = new Point(304, 280);
+        lblSellPrice.Location = new Point(304, 340);
         lblSellPrice.Name = "lblSellPrice";
         lblSellPrice.Size = new Size(70, 20);
         lblSellPrice.Text = "Sell Price";
@@ -139,22 +143,52 @@ partial class BookEditForm
         // numSellPrice
         //
         numSellPrice.DecimalPlaces = 2;
-        numSellPrice.Location = new Point(304, 304);
+        numSellPrice.Location = new Point(304, 364);
         numSellPrice.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
         numSellPrice.Name = "numSellPrice";
         numSellPrice.Size = new Size(120, 27);
         //
+        // lblCategory
+        //
+        lblCategory.AutoSize = true;
+        lblCategory.Location = new Point(24, 276);
+        lblCategory.Name = "lblCategory";
+        lblCategory.Size = new Size(69, 20);
+        lblCategory.Text = "Category";
+        //
+        // cboCategory
+        //
+        cboCategory.DropDownStyle = ComboBoxStyle.DropDownList;
+        cboCategory.Location = new Point(24, 300);
+        cboCategory.Name = "cboCategory";
+        cboCategory.Size = new Size(190, 28);
+        //
+        // lblSupplier
+        //
+        lblSupplier.AutoSize = true;
+        lblSupplier.Location = new Point(234, 276);
+        lblSupplier.Name = "lblSupplier";
+        lblSupplier.Size = new Size(64, 20);
+        lblSupplier.Text = "Supplier";
+        //
+        // cboSupplier
+        //
+        cboSupplier.DropDownStyle = ComboBoxStyle.DropDownList;
+        cboSupplier.Location = new Point(234, 300);
+        cboSupplier.Name = "cboSupplier";
+        cboSupplier.Size = new Size(190, 28);
+        //
         // lblQuantity
         //
         lblQuantity.AutoSize = true;
-        lblQuantity.Location = new Point(24, 348);
+        lblQuantity.Location = new Point(24, 408);
         lblQuantity.Name = "lblQuantity";
         lblQuantity.Size = new Size(65, 20);
         lblQuantity.Text = "Quantity";
         //
         // numQuantity
         //
-        numQuantity.Location = new Point(24, 372);
+        numQuantity.Location = new Point(24, 432);
         numQuantity.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
         numQuantity.Name = "numQuantity";
         numQuantity.Size = new Size(120, 27);
@@ -165,7 +199,7 @@ partial class BookEditForm
         btnSave.FlatAppearance.BorderSize = 0;
         btnSave.FlatStyle = FlatStyle.Flat;
         btnSave.ForeColor = Color.White;
-        btnSave.Location = new Point(24, 420);
+        btnSave.Location = new Point(24, 480);
         btnSave.Name = "btnSave";
         btnSave.Size = new Size(120, 40);
         btnSave.Text = "Save";
@@ -174,7 +208,7 @@ partial class BookEditForm
         //
         // btnCancel
         //
-        btnCancel.Location = new Point(160, 420);
+        btnCancel.Location = new Point(160, 480);
         btnCancel.Name = "btnCancel";
         btnCancel.Size = new Size(120, 40);
         btnCancel.Text = "Cancel";
@@ -186,7 +220,7 @@ partial class BookEditForm
         AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
         CancelButton = btnCancel;
-        ClientSize = new Size(454, 482);
+        ClientSize = new Size(454, 540);
         Controls.Add(btnCancel);
         Controls.Add(btnSave);
         Controls.Add(numQuantity);
@@ -197,6 +231,10 @@ partial class BookEditForm
         Controls.Add(lblImportPrice);
         Controls.Add(numPublishYear);
         Controls.Add(lblPublishYear);
+        Controls.Add(cboSupplier);
+        Controls.Add(lblSupplier);
+        Controls.Add(cboCategory);
+        Controls.Add(lblCategory);
         Controls.Add(txtPublisher);
         Controls.Add(lblPublisher);
         Controls.Add(txtISBN);
@@ -233,6 +271,10 @@ partial class BookEditForm
     private NumericUpDown numImportPrice;
     private Label lblSellPrice;
     private NumericUpDown numSellPrice;
+    private Label lblCategory;
+    private ComboBox cboCategory;
+    private Label lblSupplier;
+    private ComboBox cboSupplier;
     private Label lblQuantity;
     private NumericUpDown numQuantity;
     private Button btnSave;

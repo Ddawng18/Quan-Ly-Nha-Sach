@@ -10,9 +10,6 @@ public partial class BookControl : UserControl
     private readonly IBookService _bookService = ServiceLocator.BookService;
     private readonly ICategoryService _categoryService = ServiceLocator.CategoryService;
     private readonly bool _readOnly;
-    private ComboBox cboCategoryFilter = new();
-    private ComboBox cboPublisherFilter = new();
-    private ComboBox cboStockFilter = new();
 
     public BookControl()
         : this(false)
@@ -23,53 +20,30 @@ public partial class BookControl : UserControl
     {
         _readOnly = readOnly;
         InitializeComponent();
-        InitializeFilters();
+        LoadFilters();
         ApplyTheme();
         LoadBooks();
     }
 
-    private void InitializeFilters()
+    private void LoadFilters()
     {
-        panelToolbar.Height = 92;
         txtSearch.PlaceholderText = "Search title, author, ISBN...";
 
-        cboCategoryFilter = new ComboBox
-        {
-            DropDownStyle = ComboBoxStyle.DropDownList,
-            Location = new Point(0, 52),
-            Size = new Size(180, 28),
-            DisplayMember = "Text",
-            ValueMember = "Value"
-        };
+        cboCategoryFilter.DisplayMember = "Text";
+        cboCategoryFilter.ValueMember = "Value";
         var categories = new List<object> { new { Text = "All categories", Value = (int?)null } };
         categories.AddRange(_categoryService.GetCategories().Select(c => new { Text = c.CategoryName, Value = (int?)c.CategoryID }));
         cboCategoryFilter.DataSource = categories;
         cboCategoryFilter.SelectedIndexChanged += (_, _) => LoadBooks();
 
-        cboPublisherFilter = new ComboBox
-        {
-            DropDownStyle = ComboBoxStyle.DropDownList,
-            Location = new Point(188, 52),
-            Size = new Size(180, 28)
-        };
         cboPublisherFilter.Items.Add("All publishers");
         cboPublisherFilter.Items.AddRange(_bookService.GetPublishers().Cast<object>().ToArray());
         cboPublisherFilter.SelectedIndex = 0;
         cboPublisherFilter.SelectedIndexChanged += (_, _) => LoadBooks();
 
-        cboStockFilter = new ComboBox
-        {
-            DropDownStyle = ComboBoxStyle.DropDownList,
-            Location = new Point(376, 52),
-            Size = new Size(140, 28)
-        };
         cboStockFilter.Items.AddRange(Enum.GetNames<StockLevelFilter>().Cast<object>().ToArray());
         cboStockFilter.SelectedItem = StockLevelFilter.All.ToString();
         cboStockFilter.SelectedIndexChanged += (_, _) => LoadBooks();
-
-        panelToolbar.Controls.Add(cboCategoryFilter);
-        panelToolbar.Controls.Add(cboPublisherFilter);
-        panelToolbar.Controls.Add(cboStockFilter);
 
         btnAdd.Enabled = !_readOnly;
         btnEdit.Enabled = !_readOnly;

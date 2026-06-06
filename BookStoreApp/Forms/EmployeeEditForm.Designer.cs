@@ -55,6 +55,7 @@ partial class EmployeeEditForm
         lblRole.Location = new Point(24, 280);
         lblRole.Text = "Role";
         cboRole.DropDownStyle = ComboBoxStyle.DropDownList;
+        cboRole.Items.AddRange(["Admin", "Staff"]);
         cboRole.Location = new Point(24, 304);
         cboRole.Size = new Size(160, 28);
         btnSave.BackColor = Color.FromArgb(33, 150, 243);

@@ -1,3 +1,4 @@
+using BookStoreApp.BLL;
 using BookStoreApp.DTO;
 
 namespace BookStoreApp.Forms;
@@ -6,12 +7,15 @@ public partial class BookEditForm : Form
 {
     private readonly Book? _existingBook;
     private readonly ErrorProvider _errorProvider = new();
+    private readonly ICategoryService _categoryService = ServiceLocator.CategoryService;
+    private readonly ISupplierService _supplierService = ServiceLocator.SupplierService;
 
     public Book Book { get; private set; } = new();
 
     public BookEditForm()
     {
         InitializeComponent();
+        LoadLookups();
         Text = "Add Book";
     }
 
@@ -28,6 +32,27 @@ public partial class BookEditForm : Form
         numImportPrice.Value = ClampNumeric(book.ImportPrice, numImportPrice.Minimum, numImportPrice.Maximum);
         numSellPrice.Value = ClampNumeric(book.SellPrice, numSellPrice.Minimum, numSellPrice.Maximum);
         numQuantity.Value = ClampNumeric(book.QuantityInStock, numQuantity.Minimum, numQuantity.Maximum);
+
+        if (book.CategoryID > 0)
+        {
+            cboCategory.SelectedValue = book.CategoryID;
+        }
+
+        if (book.SupplierID > 0)
+        {
+            cboSupplier.SelectedValue = book.SupplierID;
+        }
+    }
+
+    private void LoadLookups()
+    {
+        cboCategory.DisplayMember = nameof(Category.CategoryName);
+        cboCategory.ValueMember = nameof(Category.CategoryID);
+        cboCategory.DataSource = _categoryService.GetCategories().ToList();
+
+        cboSupplier.DisplayMember = nameof(Supplier.SupplierName);
+        cboSupplier.ValueMember = nameof(Supplier.SupplierID);
+        cboSupplier.DataSource = _supplierService.GetSuppliers().ToList();
     }
 
     private void btnSave_Click(object sender, EventArgs e)
@@ -39,11 +64,14 @@ public partial class BookEditForm : Form
             return;
         }
 
+        var categoryId = cboCategory.SelectedValue is int catId ? catId : 0;
+        var supplierId = cboSupplier.SelectedValue is int supId ? supId : 0;
+
         Book = new Book
         {
             BookID = _existingBook?.BookID ?? 0,
-            CategoryID = _existingBook?.CategoryID ?? 0,
-            SupplierID = _existingBook?.SupplierID ?? 0,
+            CategoryID = categoryId,
+            SupplierID = supplierId,
             Title = txtTitle.Text.Trim(),
             Author = txtAuthor.Text.Trim(),
             ISBN = txtISBN.Text.Trim(),

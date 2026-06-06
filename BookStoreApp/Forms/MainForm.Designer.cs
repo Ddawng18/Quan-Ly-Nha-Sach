@@ -70,24 +70,106 @@ partial class MainForm
         //
         // btnDashboard
         //
-        ConfigureSidebarButton(btnDashboard, "Dashboard", 0, btnDashboard_Click);
+        btnDashboard.Dock = DockStyle.Top;
+        btnDashboard.Name = "btnDashboard";
+        btnDashboard.Size = new Size(220, 40);
+        btnDashboard.TabIndex = 1;
+        btnDashboard.Text = "Dashboard";
+        btnDashboard.TextAlign = ContentAlignment.MiddleLeft;
+        btnDashboard.Padding = new Padding(16, 0, 0, 0);
+        btnDashboard.Click += btnDashboard_Click;
+        AppTheme.StyleSidebarButton(btnDashboard, isActive: false);
         //
         // btnBooks
         //
-        ConfigureSidebarButton(btnBooks, "Books", 1, btnBooks_Click);
-        ConfigureSidebarButton(btnCategories, "Categories", 2, btnCategories_Click);
-        ConfigureSidebarButton(btnSuppliers, "Suppliers", 3, btnSuppliers_Click);
-        ConfigureSidebarButton(btnCustomers, "Customers", 4, btnCustomers_Click);
-        ConfigureSidebarButton(btnOrders, "Orders", 5, btnOrders_Click);
-        ConfigureSidebarButton(btnReports, "Reports", 6, btnReports_Click);
-        ConfigureSidebarButton(btnEmployees, "Employees", 7, btnEmployees_Click);
+        btnBooks.Dock = DockStyle.Top;
+        btnBooks.Name = "btnBooks";
+        btnBooks.Size = new Size(220, 40);
+        btnBooks.TabIndex = 2;
+        btnBooks.Text = "Books";
+        btnBooks.TextAlign = ContentAlignment.MiddleLeft;
+        btnBooks.Padding = new Padding(16, 0, 0, 0);
+        btnBooks.Click += btnBooks_Click;
+        AppTheme.StyleSidebarButton(btnBooks, isActive: false);
+        //
+        // btnCategories
+        //
+        btnCategories.Dock = DockStyle.Top;
+        btnCategories.Name = "btnCategories";
+        btnCategories.Size = new Size(220, 40);
+        btnCategories.TabIndex = 3;
+        btnCategories.Text = "Categories";
+        btnCategories.TextAlign = ContentAlignment.MiddleLeft;
+        btnCategories.Padding = new Padding(16, 0, 0, 0);
+        btnCategories.Click += btnCategories_Click;
+        AppTheme.StyleSidebarButton(btnCategories, isActive: false);
+        //
+        // btnSuppliers
+        //
+        btnSuppliers.Dock = DockStyle.Top;
+        btnSuppliers.Name = "btnSuppliers";
+        btnSuppliers.Size = new Size(220, 40);
+        btnSuppliers.TabIndex = 4;
+        btnSuppliers.Text = "Suppliers";
+        btnSuppliers.TextAlign = ContentAlignment.MiddleLeft;
+        btnSuppliers.Padding = new Padding(16, 0, 0, 0);
+        btnSuppliers.Click += btnSuppliers_Click;
+        AppTheme.StyleSidebarButton(btnSuppliers, isActive: false);
+        //
+        // btnCustomers
+        //
+        btnCustomers.Dock = DockStyle.Top;
+        btnCustomers.Name = "btnCustomers";
+        btnCustomers.Size = new Size(220, 40);
+        btnCustomers.TabIndex = 5;
+        btnCustomers.Text = "Customers";
+        btnCustomers.TextAlign = ContentAlignment.MiddleLeft;
+        btnCustomers.Padding = new Padding(16, 0, 0, 0);
+        btnCustomers.Click += btnCustomers_Click;
+        AppTheme.StyleSidebarButton(btnCustomers, isActive: false);
+        //
+        // btnOrders
+        //
+        btnOrders.Dock = DockStyle.Top;
+        btnOrders.Name = "btnOrders";
+        btnOrders.Size = new Size(220, 40);
+        btnOrders.TabIndex = 6;
+        btnOrders.Text = "Orders";
+        btnOrders.TextAlign = ContentAlignment.MiddleLeft;
+        btnOrders.Padding = new Padding(16, 0, 0, 0);
+        btnOrders.Click += btnOrders_Click;
+        AppTheme.StyleSidebarButton(btnOrders, isActive: false);
+        //
+        // btnReports
+        //
+        btnReports.Dock = DockStyle.Top;
+        btnReports.Name = "btnReports";
+        btnReports.Size = new Size(220, 40);
+        btnReports.TabIndex = 7;
+        btnReports.Text = "Reports";
+        btnReports.TextAlign = ContentAlignment.MiddleLeft;
+        btnReports.Padding = new Padding(16, 0, 0, 0);
+        btnReports.Click += btnReports_Click;
+        AppTheme.StyleSidebarButton(btnReports, isActive: false);
+        //
+        // btnEmployees
+        //
+        btnEmployees.Dock = DockStyle.Top;
+        btnEmployees.Name = "btnEmployees";
+        btnEmployees.Size = new Size(220, 40);
+        btnEmployees.TabIndex = 8;
+        btnEmployees.Text = "Employees";
+        btnEmployees.TextAlign = ContentAlignment.MiddleLeft;
+        btnEmployees.Padding = new Padding(16, 0, 0, 0);
+        btnEmployees.Click += btnEmployees_Click;
+        AppTheme.StyleSidebarButton(btnEmployees, isActive: false);
         //
         // btnLogout
         //
         btnLogout.Dock = DockStyle.Bottom;
         btnLogout.Name = "btnLogout";
         btnLogout.Size = new Size(220, 40);
-        btnLogout.TabIndex = 7;
+        btnLogout.TabIndex = 9;
         btnLogout.Text = "Logout";
         btnLogout.Click += btnLogout_Click;
         AppTheme.StyleSidebarButton(btnLogout, isActive: false);
@@ -146,19 +228,6 @@ partial class MainForm
         panelSidebar.ResumeLayout(false);
         panelTopBar.ResumeLayout(false);
         ResumeLayout(false);
-    }
-
-    private void ConfigureSidebarButton(Button button, string text, int tabIndex, EventHandler clickHandler)
-    {
-        button.Dock = DockStyle.Top;
-        button.Name = $"btn{text.Replace(" ", string.Empty)}";
-        button.Size = new Size(220, 40);
-        button.TabIndex = tabIndex + 1;
-        button.Text = text;
-        button.TextAlign = ContentAlignment.MiddleLeft;
-        button.Padding = new Padding(16, 0, 0, 0);
-        button.Click += clickHandler;
-        AppTheme.StyleSidebarButton(button, isActive: false);
     }
 
     #endregion

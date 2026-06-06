@@ -26,42 +26,100 @@ partial class SupplierEditForm
         btnSave = new Button();
         btnCancel = new Button();
         SuspendLayout();
+        // 
+        // lblSupplierName
+        // 
         lblSupplierName.AutoSize = true;
         lblSupplierName.Location = new Point(24, 24);
+        lblSupplierName.Name = "lblSupplierName";
+        lblSupplierName.Size = new Size(108, 20);
+        lblSupplierName.TabIndex = 9;
         lblSupplierName.Text = "Supplier Name";
+        // 
+        // txtSupplierName
+        // 
         txtSupplierName.Location = new Point(24, 48);
+        txtSupplierName.Name = "txtSupplierName";
         txtSupplierName.Size = new Size(400, 27);
+        txtSupplierName.TabIndex = 8;
+        // 
+        // lblAddress
+        // 
         lblAddress.AutoSize = true;
-        lblAddress.Location = new Point(24, 88);
+        lblAddress.Location = new Point(24, 79);
+        lblAddress.Name = "lblAddress";
+        lblAddress.Size = new Size(62, 20);
+        lblAddress.TabIndex = 7;
         lblAddress.Text = "Address";
-        txtAddress.Location = new Point(24, 112);
-        txtAddress.Size = new Size(400, 60);
+        // 
+        // txtAddress
+        // 
+        txtAddress.Location = new Point(24, 103);
         txtAddress.Multiline = true;
+        txtAddress.Name = "txtAddress";
+        txtAddress.Size = new Size(400, 27);
+        txtAddress.TabIndex = 6;
+        // 
+        // lblEmail
+        // 
         lblEmail.AutoSize = true;
-        lblEmail.Location = new Point(24, 180);
+        lblEmail.Location = new Point(24, 134);
+        lblEmail.Name = "lblEmail";
+        lblEmail.Size = new Size(46, 20);
+        lblEmail.TabIndex = 5;
         lblEmail.Text = "Email";
-        txtEmail.Location = new Point(24, 204);
+        // 
+        // txtEmail
+        // 
+        txtEmail.Location = new Point(24, 158);
+        txtEmail.Name = "txtEmail";
         txtEmail.Size = new Size(400, 27);
+        txtEmail.TabIndex = 4;
+        // 
+        // lblPhone
+        // 
         lblPhone.AutoSize = true;
-        lblPhone.Location = new Point(24, 244);
+        lblPhone.Location = new Point(24, 189);
+        lblPhone.Name = "lblPhone";
+        lblPhone.Size = new Size(50, 20);
+        lblPhone.TabIndex = 3;
         lblPhone.Text = "Phone";
-        txtPhone.Location = new Point(24, 268);
+        // 
+        // txtPhone
+        // 
+        txtPhone.Location = new Point(24, 213);
+        txtPhone.Name = "txtPhone";
         txtPhone.Size = new Size(400, 27);
+        txtPhone.TabIndex = 2;
+        // 
+        // btnSave
+        // 
         btnSave.BackColor = Color.FromArgb(33, 150, 243);
         btnSave.FlatAppearance.BorderSize = 0;
         btnSave.FlatStyle = FlatStyle.Flat;
         btnSave.ForeColor = Color.White;
-        btnSave.Location = new Point(24, 316);
+        btnSave.Location = new Point(24, 256);
+        btnSave.Name = "btnSave";
         btnSave.Size = new Size(120, 40);
+        btnSave.TabIndex = 1;
         btnSave.Text = "Save";
+        btnSave.UseVisualStyleBackColor = false;
         btnSave.Click += btnSave_Click;
-        btnCancel.Location = new Point(160, 316);
+        // 
+        // btnCancel
+        // 
+        btnCancel.Location = new Point(150, 256);
+        btnCancel.Name = "btnCancel";
         btnCancel.Size = new Size(120, 40);
+        btnCancel.TabIndex = 0;
         btnCancel.Text = "Cancel";
         btnCancel.Click += btnCancel_Click;
+        // 
+        // SupplierEditForm
+        // 
         AcceptButton = btnSave;
         CancelButton = btnCancel;
-        ClientSize = new Size(454, 376);
+        ClientSize = new Size(454, 316);
         Controls.Add(btnCancel);
         Controls.Add(btnSave);
         Controls.Add(txtPhone);
@@ -75,6 +133,7 @@ partial class SupplierEditForm
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
         MinimizeBox = false;
+        Name = "SupplierEditForm";
         StartPosition = FormStartPosition.CenterParent;
         Text = "Supplier";
         ResumeLayout(false);
