@@ -244,5 +244,5 @@ Khi để trống credentials, hệ thống tự động fallback về **Demo**.
 
 | Username | Password | Vai trò |
 |----------|----------|---------|
-| `admin` | `admin` | Admin (toàn quyền) |
-| `staff` | `staff` | Staff (POS + xem kho) |
+| `admin` | `1` | Admin (toàn quyền) |
+| `E` | `2` | Staff (POS + xem kho) |
