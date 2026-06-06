@@ -1,4 +1,5 @@
 using System.Text.Json;
+using BookStoreApp.DAL;
 using BookStoreApp.DTO.Payments;
 using BookStoreApp.Forms;
 
@@ -11,16 +12,37 @@ static class Program
     /// </summary>
     public static PaymentConfig PaymentConfig { get; } = LoadPaymentConfig();
 
-    /// <summary>
-    ///  The main entry point for the application.
-    /// </summary>
     [STAThread]
     static void Main()
     {
-        // To customize application configuration such as set high DPI settings or default font,
-        // see https://aka.ms/applicationconfiguration.
+        // Đọc connection string và cấu hình DbConnectionFactory
+        // trước khi ServiceLocator khởi tạo bất kỳ Repository nào
+        ConfigureDatabase();
+
         ApplicationConfiguration.Initialize();
         Application.Run(new LoginForm());
+    }
+
+    private static void ConfigureDatabase()
+    {
+        try
+        {
+            var path = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
+            if (!File.Exists(path)) return;
+
+            var json = File.ReadAllText(path);
+            using var doc = JsonDocument.Parse(json);
+
+            if (doc.RootElement.TryGetProperty("ConnectionStrings", out var cs) &&
+                cs.TryGetProperty("DefaultConnection", out var connStr))
+            {
+                DbConnectionFactory.Configure(connStr.GetString()!);
+            }
+        }
+        catch
+        {
+            // Nếu đọc config thất bại, dùng connection string mặc định trong DbConnectionFactory
+        }
     }
 
     private static PaymentConfig LoadPaymentConfig()
@@ -28,10 +50,7 @@ static class Program
         try
         {
             var path = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
-            if (!File.Exists(path))
-            {
-                return new PaymentConfig();
-            }
+            if (!File.Exists(path)) return new PaymentConfig();
 
             var json = File.ReadAllText(path);
             using var doc = JsonDocument.Parse(json);
@@ -46,7 +65,6 @@ static class Program
         }
         catch
         {
-            // If config file is missing or malformed, use defaults (Demo provider)
             return new PaymentConfig();
         }
     }

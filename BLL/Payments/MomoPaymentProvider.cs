@@ -3,7 +3,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using BookStoreApp.DTO.Payments;
-using BookStoreApp.Utilities;
 
 namespace BookStoreApp.BLL.Payments;
 
@@ -16,9 +15,7 @@ public class MomoPaymentProvider : IPaymentProvider
     private readonly MomoConfig _config;
     private readonly HttpClient _httpClient;
 
-    public MomoPaymentProvider(MomoConfig config) : this(config, new HttpClient())
-    {
-    }
+    public MomoPaymentProvider(MomoConfig config) : this(config, new HttpClient()) { }
 
     public MomoPaymentProvider(MomoConfig config, HttpClient httpClient)
     {
@@ -36,7 +33,6 @@ public class MomoPaymentProvider : IPaymentProvider
         var orderInfo = string.IsNullOrWhiteSpace(description) ? $"Order #{orderId}" : description;
         var extraData = "";
 
-        // MoMo requires amount as integer (VND, no decimals)
         var amountInt = (long)Math.Round(amount, MidpointRounding.AwayFromZero);
 
         var rawSignature =
@@ -56,29 +52,26 @@ public class MomoPaymentProvider : IPaymentProvider
         var payload = new
         {
             partnerCode = _config.PartnerCode,
-            accessKey = _config.AccessKey,
+            accessKey   = _config.AccessKey,
             requestId,
-            amount = amountInt.ToString(),
+            amount      = amountInt.ToString(),
             orderId,
             orderInfo,
             redirectUrl = "https://localhost/redirect",
-            ipnUrl = "https://localhost/ipn",
+            ipnUrl      = "https://localhost/ipn",
             extraData,
             requestType = "captureWallet",
             signature,
-            lang = "vi"
+            lang        = "vi"
         };
 
         try
         {
             var baseUrl = (_config.BaseUrl ?? "https://test-payment.momo.vn/v2/gateway/api/").TrimEnd('/');
             var response = await _httpClient.PostAsJsonAsync(
-                $"{baseUrl}/create",
-                payload,
-                cancellationToken);
+                $"{baseUrl}/create", payload, cancellationToken);
 
             var content = await response.Content.ReadAsStringAsync(cancellationToken);
-
             using var doc = JsonDocument.Parse(content);
             var root = doc.RootElement;
 
@@ -87,17 +80,13 @@ public class MomoPaymentProvider : IPaymentProvider
             if (resultCode == 0)
             {
                 var transId = root.TryGetProperty("transId", out var tid)
-                    ? tid.GetString() ?? requestId
-                    : requestId;
+                    ? tid.GetString() ?? requestId : requestId;
                 var qrCodeUrl = root.TryGetProperty("qrCodeUrl", out var qr)
-                    ? qr.GetString()
-                    : null;
+                    ? qr.GetString() : null;
 
                 string? qrBase64 = null;
                 if (!string.IsNullOrWhiteSpace(qrCodeUrl))
-                {
                     qrBase64 = await DownloadQrImageAsync(qrCodeUrl, cancellationToken);
-                }
 
                 return new PaymentCreationResult(true, transId, qrBase64 ?? string.Empty, null);
             }
@@ -131,23 +120,20 @@ public class MomoPaymentProvider : IPaymentProvider
         var payload = new
         {
             partnerCode = _config.PartnerCode,
-            accessKey = _config.AccessKey,
+            accessKey   = _config.AccessKey,
             requestId,
-            orderId = transactionId,
+            orderId     = transactionId,
             signature,
-            lang = "vi"
+            lang        = "vi"
         };
 
         try
         {
             var baseUrl = (_config.BaseUrl ?? "https://test-payment.momo.vn/v2/gateway/api/").TrimEnd('/');
             var response = await _httpClient.PostAsJsonAsync(
-                $"{baseUrl}/query",
-                payload,
-                cancellationToken);
+                $"{baseUrl}/query", payload, cancellationToken);
 
             var content = await response.Content.ReadAsStringAsync(cancellationToken);
-
             using var doc = JsonDocument.Parse(content);
             var root = doc.RootElement;
 
@@ -155,14 +141,14 @@ public class MomoPaymentProvider : IPaymentProvider
 
             var status = resultCode switch
             {
-                0 => PaymentStatus.Paid,
+                0    => PaymentStatus.Paid,
                 1000 => PaymentStatus.Pending,
                 1001 => PaymentStatus.Pending,
                 1002 => PaymentStatus.Pending,
                 1003 => PaymentStatus.Cancelled,
                 1004 => PaymentStatus.Failed,
                 1005 => PaymentStatus.Expired,
-                _ => PaymentStatus.Failed
+                _    => PaymentStatus.Failed
             };
 
             var errorMessage = status == PaymentStatus.Paid ? null
@@ -184,10 +170,7 @@ public class MomoPaymentProvider : IPaymentProvider
             var bytes = await _httpClient.GetByteArrayAsync(url, cancellationToken);
             return Convert.ToBase64String(bytes);
         }
-        catch
-        {
-            return null;
-        }
+        catch { return null; }
     }
 
     private static string ComputeHmacSha256(string data, string key)
