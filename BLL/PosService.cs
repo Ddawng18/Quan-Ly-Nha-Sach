@@ -191,7 +191,7 @@ public class PosService : IPosService
                 book.QuantityInStock = Math.Max(0, book.QuantityInStock - detail.Quantity);
                 book.LastSoldDate = DateTime.Now;
 
-                Utilities.FileLogger.Info(
+               FileLogger.Info(
                     $"Stock: Book #{book.BookID} \"{book.Title}\" {oldStock}→{book.QuantityInStock}");
             }
         }

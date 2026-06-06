@@ -1,17 +1,17 @@
 using BookStoreApp.DAL.Interfaces;
-using BookStoreApp.DAL.Repositories;
 using BookStoreApp.DTO;
-using BookStoreApp.Utilities;
 
 namespace BookStoreApp.BLL;
 
 public class BookService : IBookService
 {
     private readonly IBookRepository _bookRepository;
+    private readonly ICategoryRepository _categoryRepository;
 
-    public BookService(IBookRepository bookRepository)
+    public BookService(IBookRepository bookRepository, ICategoryRepository categoryRepository)
     {
         _bookRepository = bookRepository;
+        _categoryRepository = categoryRepository;
     }
 
     public IReadOnlyList<Book> GetBooks() => _bookRepository.GetAll();
@@ -21,9 +21,7 @@ public class BookService : IBookService
         var books = _bookRepository.GetAll();
 
         if (string.IsNullOrWhiteSpace(searchText))
-        {
             return books;
-        }
 
         return books
             .Where(x =>
@@ -53,21 +51,17 @@ public class BookService : IBookService
         }
 
         if (filter.CategoryId.HasValue)
-        {
             query = query.Where(x => x.CategoryID == filter.CategoryId.Value);
-        }
 
         if (!string.IsNullOrWhiteSpace(filter.Publisher))
-        {
             query = query.Where(x => x.Publisher.Equals(filter.Publisher, StringComparison.OrdinalIgnoreCase));
-        }
 
         query = filter.StockLevel switch
         {
-            StockLevelFilter.InStock => query.Where(x => x.QuantityInStock > 0),
-            StockLevelFilter.LowStock => query.Where(x => x.QuantityInStock > 0 && x.QuantityInStock <= 10),
+            StockLevelFilter.InStock    => query.Where(x => x.QuantityInStock > 0),
+            StockLevelFilter.LowStock   => query.Where(x => x.QuantityInStock > 0 && x.QuantityInStock <= 10),
             StockLevelFilter.OutOfStock => query.Where(x => x.QuantityInStock <= 0),
-            _ => query
+            _                           => query
         };
 
         return MapToViews(query);
@@ -83,34 +77,10 @@ public class BookService : IBookService
 
     public Book? GetBook(int bookId) => _bookRepository.GetById(bookId);
 
-    private static IReadOnlyList<BookViewDto> MapToViews(IEnumerable<Book> books) =>
-        books.Select(MapToView).ToList();
-
-    private static BookViewDto MapToView(Book book) =>
-        new()
-        {
-            BookID = book.BookID,
-            CategoryID = book.CategoryID,
-            CategoryName = FakeDatabase.Categories
-                .FirstOrDefault(c => c.CategoryID == book.CategoryID)?.CategoryName ?? "-",
-            SupplierID = book.SupplierID,
-            Title = book.Title,
-            Author = book.Author,
-            ISBN = book.ISBN,
-            Publisher = book.Publisher,
-            PublishYear = book.PublishYear,
-            ImportPrice = book.ImportPrice,
-            SellPrice = book.SellPrice,
-            QuantityInStock = book.QuantityInStock
-        };
-
     public ValidationResult AddBook(Book book)
     {
         var validation = Validate(book, isUpdate: false);
-        if (!validation.IsValid)
-        {
-            return validation;
-        }
+        if (!validation.IsValid) return validation;
 
         _bookRepository.Add(book);
         return ValidationResult.Ok();
@@ -119,15 +89,10 @@ public class BookService : IBookService
     public ValidationResult UpdateBook(Book book)
     {
         var validation = Validate(book, isUpdate: true);
-        if (!validation.IsValid)
-        {
-            return validation;
-        }
+        if (!validation.IsValid) return validation;
 
         if (_bookRepository.GetById(book.BookID) is null)
-        {
             return ValidationResult.Fail("Book not found.");
-        }
 
         _bookRepository.Update(book);
         return ValidationResult.Ok();
@@ -136,57 +101,65 @@ public class BookService : IBookService
     public ValidationResult DeleteBook(int bookId)
     {
         if (_bookRepository.GetById(bookId) is null)
-        {
             return ValidationResult.Fail("Book not found.");
-        }
 
         _bookRepository.Delete(bookId);
         return ValidationResult.Ok();
     }
 
+    // ── helpers ──────────────────────────────────────────────
+
+    private IReadOnlyList<BookViewDto> MapToViews(IEnumerable<Book> books) =>
+        books.Select(MapToView).ToList();
+
+    private BookViewDto MapToView(Book book)
+    {
+        // Dùng ICategoryRepository thay vì FakeDatabase
+        var categoryName = _categoryRepository.GetById(book.CategoryID)?.CategoryName ?? "-";
+
+        return new BookViewDto
+        {
+            BookID          = book.BookID,
+            CategoryID      = book.CategoryID,
+            CategoryName    = categoryName,
+            SupplierID      = book.SupplierID,
+            Title           = book.Title,
+            Author          = book.Author,
+            ISBN            = book.ISBN,
+            Publisher       = book.Publisher,
+            PublishYear     = book.PublishYear,
+            ImportPrice     = book.ImportPrice,
+            SellPrice       = book.SellPrice,
+            QuantityInStock = book.QuantityInStock
+        };
+    }
+
     private static ValidationResult Validate(Book book, bool isUpdate)
     {
         if (book is null)
-        {
             return ValidationResult.Fail("Book data is required.");
-        }
 
         if (isUpdate && book.BookID <= 0)
-        {
             return ValidationResult.Fail("Invalid book ID.");
-        }
 
         if (string.IsNullOrWhiteSpace(book.Title))
-        {
             return ValidationResult.Fail("Title is required.");
-        }
 
         if (string.IsNullOrWhiteSpace(book.Author))
-        {
             return ValidationResult.Fail("Author is required.");
-        }
 
         if (string.IsNullOrWhiteSpace(book.ISBN))
-        {
             return ValidationResult.Fail("ISBN is required.");
-        }
 
         if (book.SellPrice < 0)
-        {
             return ValidationResult.Fail("Sell price cannot be negative.");
-        }
 
         if (book.ImportPrice < 0)
-        {
             return ValidationResult.Fail("Import price cannot be negative.");
-        }
 
         if (book.QuantityInStock < 0)
-        {
             return ValidationResult.Fail("Quantity cannot be negative.");
-        }
 
         return ValidationResult.Ok();
     }
-
 }

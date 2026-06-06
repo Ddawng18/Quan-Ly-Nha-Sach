@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\DTO\BookStoreApp.DTO.csproj" />
-    <ProjectReference Include="..\Utilities\BookStoreApp.Utilities.csproj" />
+
   </ItemGroup>
 
   <PropertyGroup>
@@ -10,5 +10,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <!-- Thêm NuGet package Microsoft.Data.SqlClient -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+  </ItemGroup>
 
 </Project>
