@@ -1,185 +1,118 @@
 # Quan-Ly-Nha-Sach (BookStore Management System)
 
-Ứng dụng quản lý nhà sách desktop được xây dựng trên **.NET 9 Windows Forms** với kiến trúc phân lớp rõ ràng.
+Ứng dụng quản lý nhà sách desktop được xây dựng trên **.NET 9 Windows Forms** với kiến trúc phân lớp rõ ràng (DTO → DAL → BLL → UI).
 
 ---
 
 ## Mục lục
 
-- [Tổng quan](#tổng-quan)
-- [Tính năng chính](#tính-năng-chính)
-- [Công nghệ](#công-nghệ)
-- [Cấu trúc project](#cấu-trúc-project)
-- [Kiến trúc](#kiến-trúc)
-- [Cài đặt & Chạy](#cài-đặt--chạy)
-- [Cấu hình database](#cấu-hình-database)
-- [Thanh toán QR](#thanh-toán-qr)
+- [Yêu cầu hệ thống](#yêu-cầu-hệ-thống)
+- [Cài đặt SQL Server](#cài-đặt-sql-server)
+- [Tạo database](#tạo-database)
+- [Clone & Chạy project](#clone--chạy-project)
+- [Cấu hình connection string](#cấu-hình-connection-string)
 - [Tài khoản đăng nhập](#tài-khoản-đăng-nhập)
+- [Cấu trúc project](#cấu-trúc-project)
+- [Tính năng chính](#tính-năng-chính)
+- [Thanh toán QR](#thanh-toán-qr)
 - [Ghi chú phát triển](#ghi-chú-phát-triển)
+- [Xử lý lỗi thường gặp](#xử-lý-lỗi-thường-gặp)
 
 ---
 
-## Tổng quan
+## Yêu cầu hệ thống
 
-BookStoreApp là ứng dụng desktop quản lý nhà sách với đầy đủ tính năng: quản lý sách, khách hàng, nhân viên, nhà cung cấp, danh mục, hóa đơn báo cáo và bán hàng POS (Point of Sale) tích hợp thanh toán QR.
-
-Ứng dụng sử dụng **SQL Server** làm database thông qua **ADO.NET** (`Microsoft.Data.SqlClient`) và kiến trúc phân lớp **DTO → DAL → BLL → UI**.
-
----
-
-## Tính năng chính
-
-### Quản lý Sách
-- Thêm / Sửa / Xóa sách với đầy đủ thông tin: ISBN, tiêu đề, tác giả, nhà xuất bản, năm XB, giá nhập, giá bán, tồn kho
-- Chọn **Danh mục (Category)** và **Nhà cung cấp (Supplier)** khi thêm/sửa sách
-- Tìm kiếm theo tiêu đề, tác giả, ISBN
-- Lọc theo danh mục, nhà xuất bản, mức tồn kho (Còn hàng / Sắp hết / Hết hàng)
-
-### Quản lý Khách hàng
-- CRUD khách hàng với lịch sử mua hàng
-- Tích điểm thưởng (loyalty points) khi mua hàng
-- Quy đổi điểm thành tiền giảm giá tại quầy POS
-
-### Quản lý Nhân viên
-- CRUD nhân viên với vai trò **Admin** (toàn quyền) và **Staff** (bán hàng + xem kho)
-- Giao diện phân quyền: Staff sẽ ẩn các chức năng quản trị
-
-### Bán hàng POS (Point of Sale) — `PosForm`
-- Giỏ hàng: thêm / xóa sách, điều chỉnh số lượng
-- Giảm giá từng dòng và giảm giá toàn hóa đơn (phần trăm hoặc số tiền cố định)
-- Tính thuế, quy đổi điểm thưởng
-- **Thanh toán Tiền mặt** — lưu hóa đơn ngay
-- **Thanh toán QR** — mở form hiển thị mã QR, tự động kiểm tra trạng thái
-
-### Quản lý Hóa đơn
-- Danh sách hóa đơn với lọc theo ngày và trạng thái
-- Xem chi tiết hóa đơn (sản phẩm, khách hàng, nhân viên, phương thức thanh toán)
-- Cập nhật trạng thái: Pending → Paid → Cancelled
-
-### Báo cáo & Thống kê
-- Doanh thu theo ngày / tuần / tháng (biểu đồ OxyPlot)
-- Top N sách bán chạy nhất
-- Cảnh báo sách sắp hết hàng
-- Báo cáo sách bán chậm (90 ngày)
+| Thành phần | Phiên bản / Yêu cầu |
+|-----------|---------------------|
+| **Hệ điều hành** | Windows 10 / 11 |
+| **.NET SDK** | [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0) |
+| **SQL Server** | SQL Server 2022 / 2019 / Express / LocalDB |
+| **IDE (khuyến nghị)** | Visual Studio 2022 |
 
 ---
 
-## Công nghệ
+## Cài đặt SQL Server
 
-| Thành phần | Công nghệ |
-|-----------|-----------|
-| **Runtime** | .NET 9 |
-| **UI Framework** | Windows Forms |
-| **Ngôn ngữ** | C# 13 |
-| **Database** | SQL Server (ADO.NET) |
-| **ADO.NET Provider** | Microsoft.Data.SqlClient 5.2.2 |
-| **Biểu đồ** | OxyPlot.WindowsForms 2.2.0 |
-| **Cấu hình** | Microsoft.Extensions.Configuration.Json |
-| **Payment APIs** | MoMo v2 sandbox, VNPay sandbox |
+### Bước 1: Tải SQL Server
+
+Chọn 1 trong 3 phiên bản:
+
+| Phiên bản | Link tải | Ghi chú |
+|-----------|----------|---------|
+| **SQL Server Express** | https://www.microsoft.com/en-us/download/details.aspx?id=104781 | Miễn phí, đủ dùng |
+| **SQL Server Developer** | https://www.microsoft.com/en-us/sql-server/sql-server-downloads | Miễn phí, đầy đủ tính năng |
+| **LocalDB** | Đi kèm Visual Studio | Nhẹ, không cần cài service |
+
+### Bước 2: Kiểm tra SQL Server đang chạy
+
+Mở **SQL Server Management Studio (SSMS)** hoặc **Azure Data Studio**.
+
+Nếu chưa có SSMS, tải tại: https://aka.ms/ssmsfullsetup
+
+Kiểm tra tên instance server của bạn:
+- Mở SSMS → Object Explorer → xem tên server (ví dụ: `localhost`, `.\SQLEXPRESS`, `(localdb)\MSSQLLocalDB`)
 
 ---
 
-## Cấu trúc project
+## Tạo database
 
-```
-BookStoreApp.sln
-├── DTO/                          # Data Transfer Objects (Models, Enums)
-│   ├── Books/                    # Book, BookViewDto, BookFilter, StockLevelFilter
-│   ├── Customers/                # Customer, CustomerPurchaseDto
-│   ├── Employees/                # Employee
-│   ├── Orders/                   # Order, OrderViewDto, OrderDetail, OrderStatus
-│   ├── POS/                      # CartLine, CartTotals, CheckoutRequest, CheckoutResult, DiscountType
-│   ├── Payments/                 # PaymentConfig, PaymentStatus
-│   ├── Reports/                  # ReportRowDto, ReportSectionDto
-│   ├── Dashboard/                # DashboardMetricDto, BestSellingBookDto
-│   ├── Category/, Supplier/      # Category & Supplier entities
-│   └── BookStoreApp.DTO.csproj
-│
-├── DAL/                          # Data Access Layer
-│   ├── Interfaces/               # IBookRepository, ICustomerRepository, IOrderRepository, ...
-│   ├── Repositories/             # SQL Server implementations (ADO.NET)
-│   ├── DbConnectionFactory.cs    # SqlConnection factory
-│   └── BookStoreApp.DAL.csproj
-│
-├── BLL/                          # Business Logic Layer
-│   ├── *Service.cs               # BookService, CustomerService, OrderService, PosService, ...
-│   ├── I*Service.cs              # Interfaces
-│   ├── Payments/                 # DemoPaymentProvider, MomoPaymentProvider, VNPayPaymentProvider
-│   └── BookStoreApp.BLL.csproj
-│
-├── Utilities/                    # Tiện ích chung
-│   ├── FileLogger.cs             # Ghi log file
-│   ├── ReportExporter.cs         # Xuất báo cáo CSV
-│   └── BookStoreApp.Utilities.csproj
-│
-├── BookStoreApp/                 # WinForms UI
-│   ├── Forms/                    # LoginForm, MainForm, PosForm, OrderCreateForm, BookEditForm, PaymentQRForm, ...
-│   ├── UserControls/             # DashboardControl, BookControl, OrdersControl, ReportsControl, ...
-│   ├── Theme/                    # AppBranding, AppTheme
-│   ├── ServiceLocator.cs         # Manual Dependency Injection
-│   ├── Program.cs                # Entry point
-│   ├── appsettings.json          # Connection string + Payment config
-│   └── BookStoreApp.csproj
-│
-└── README.md                     # Tài liệu này
+### Cách 1: Chạy script SQL (khuyến nghị)
+
+1. Mở SSMS → Connect đến server của bạn
+2. File → Open → File → chọn `database/init-database.sql`
+3. Nhấn **Execute** (F5)
+
+Script sẽ:
+- Tạo database `BookStoreDb`
+- Tạo 8 bảng: Categories, Suppliers, Employees, Accounts, Customers, Books, Orders, OrderDetails
+- Insert dữ liệu mẫu (categories, suppliers, books, employees, accounts, customers)
+
+### Cách 2: Tạo thủ công
+
+Nếu không dùng script, tạo database rỗng:
+```sql
+CREATE DATABASE BookStoreDb;
 ```
 
----
-
-## Kiến trúc
-
-```
-┌─────────────────────────────────────────────────┐
-│  WinForms UI (Forms + UserControls)              │
-│  Lấy service từ ServiceLocator                   │
-├─────────────────────────────────────────────────┤
-│  BLL (Service interfaces + implementations)      │
-│  Business rules, validation, orchestration       │
-├─────────────────────────────────────────────────┤
-│  DAL (Repository interfaces + SQL impls)         │
-│  ADO.NET — SqlConnection, SqlCommand             │
-├─────────────────────────────────────────────────┤
-│  DTO (Models, enums, validation)                 │
-├─────────────────────────────────────────────────┤
-│  Utilities (FileLogger, ReportExporter)          │
-└─────────────────────────────────────────────────┘
-```
-
-**Dependency Injection** được thực hiện thủ công qua `ServiceLocator` trong `BookStoreApp/ServiceLocator.cs`. Tất cả UI controls lấy service từ đây thay vì tự khởi tạo.
+> **Lưu ý:** App sẽ lỗi nếu chưa có bảng. Các bảng cần thiết xem trong file `database/init-database.sql`.
 
 ---
 
-## Cài đặt & Chạy
+## Clone & Chạy project
 
-### Yêu cầu
+### Bước 1: Clone repo
 
-- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
-- Windows 10/11
-- SQL Server (LocalDB / Express / Developer)
+```bash
+git clone https://github.com/Ddawng18/Quan-Ly-Nha-Sach.git
+cd Quan-Ly-Nha-Sach
+```
 
-### Build
+### Bước 2: Build
 
 ```bash
 dotnet build BookStoreApp.sln
 ```
 
-### Chạy
+Hoặc trong Visual Studio: `Ctrl + Shift + B`
+
+### Bước 3: Chạy
 
 ```bash
 dotnet run --project BookStoreApp
 ```
 
-Hoặc chạy file exe:
+Hoặc trong Visual Studio: nhấn `F5`
 
+Hoặc chạy file exe:
 ```bash
 .\BookStoreApp\bin\Debug\net9.0-windows\BookStoreApp.exe
 ```
 
 ---
 
-## Cấu hình database
+## Cấu hình connection string
 
-Connection string được đặt trong `BookStoreApp/appsettings.json`:
+Mở file `BookStoreApp/appsettings.json`:
 
 ```json
 {
@@ -189,25 +122,111 @@ Connection string được đặt trong `BookStoreApp/appsettings.json`:
 }
 ```
 
-Nếu dùng **SQL Server Express**:
+**Sửa `Server=` theo SQL Server của bạn:**
+
+| Loại SQL Server | Connection String |
+|-----------------|-------------------|
+| SQL Server mặc định | `Server=localhost;...` hoặc `Server=.;...` |
+| SQL Server Express | `Server=.\SQLEXPRESS;...` |
+| LocalDB | `Server=(localdb)\MSSQLLocalDB;...` |
+
+Ví dụ đầy đủ cho SQL Server Express:
 ```json
-"Server=.\\SQLEXPRESS;Database=BookStoreDb;Trusted_Connection=True;TrustServerCertificate=True;"
+"Server=.\SQLEXPRESS;Database=BookStoreDb;Trusted_Connection=True;TrustServerCertificate=True;"
 ```
 
-Nếu dùng **LocalDB**:
-```json
-"Server=(localdb)\\MSSQLLocalDB;Database=BookStoreDb;Trusted_Connection=True;TrustServerCertificate=True;"
+> **Lưu ý:** File `appsettings.json` được copy ra thư mục output mỗi khi build (`CopyToOutputDirectory`).
+
+---
+
+## Tài khoản đăng nhập
+
+Sau khi tạo database bằng script, app có sẵn 2 tài khoản:
+
+| Username | Password | Vai trò | Quyền hạn |
+|----------|----------|---------|-----------|
+| `admin` | `admin` | Admin | Toàn quyền (Sách, NCC, Danh mục, NV, KH, Hóa đơn, Báo cáo) |
+| `staff` | `staff` | Staff | Bán hàng POS + Xem kho |
+
+---
+
+## Cấu trúc project
+
+```
+Quan-Ly-Nha-Sach/
+├── database/
+│   └── init-database.sql       -- Script tạo database + dữ liệu mẫu
+│
+├── DTO/                          # Data Transfer Objects
+│   ├── Books/                    # Book, BookViewDto, BookFilter
+│   ├── Customers/                # Customer, CustomerPurchaseDto
+│   ├── Employees/                # Employee
+│   ├── Orders/                   # Order, OrderViewDto, OrderDetail
+│   ├── POS/                      # CartLine, CheckoutRequest, DiscountType
+│   ├── Payments/                 # PaymentConfig
+│   ├── Reports/                  # ReportSectionDto
+│   ├── Category/, Supplier/      # Category & Supplier
+│   └── BookStoreApp.DTO.csproj
+│
+├── DAL/                          # Data Access Layer (ADO.NET)
+│   ├── Interfaces/               # IBookRepository, IOrderRepository, ...
+│   ├── Repositories/             # SQL Server implementations
+│   ├── DbConnectionFactory.cs    # SqlConnection factory
+│   └── BookStoreApp.DAL.csproj
+│
+├── BLL/                          # Business Logic Layer
+│   ├── *Service.cs / I*Service.cs
+│   ├── Payments/                 # MoMo, VNPay, Demo providers
+│   └── BookStoreApp.BLL.csproj
+│
+├── Utilities/                    # Tiện ích
+│   ├── FileLogger.cs
+│   ├── ReportExporter.cs
+│   └── BookStoreApp.Utilities.csproj
+│
+├── BookStoreApp/                 # WinForms UI
+│   ├── Forms/                    # LoginForm, MainForm, PosForm, BookEditForm, ...
+│   ├── UserControls/             # DashboardControl, BookControl, OrdersControl, ...
+│   ├── Theme/                    # AppBranding, AppTheme
+│   ├── ServiceLocator.cs         # Manual DI
+│   ├── Program.cs                # Entry point
+│   ├── appsettings.json          # Connection string + Payment config
+│   └── BookStoreApp.csproj
+│
+├── BookStoreApp.sln
+└── README.md
 ```
 
-File `appsettings.json` được copy ra output directory mỗi khi build.
+---
+
+## Tính năng chính
+
+### Quản lý Sách
+- Thêm / Sửa / Xóa sách: ISBN, tiêu đề, tác giả, nhà xuất bản, năm XB, giá nhập, giá bán, tồn kho
+- Chọn **Danh mục (Category)** và **Nhà cung cấp (Supplier)** khi thêm/sửa
+- Tìm kiếm, lọc theo danh mục / nhà xuất bản / mức tồn kho
+
+### Bán hàng POS (`PosForm`)
+- Giỏ hàng, giảm giá từng dòng / toàn hóa đơn
+- Tính thuế, quy đổi điểm thưởng
+- **Tiền mặt** — lưu hóa đơn ngay
+- **QR Payment** — hiển thị mã QR, tự động kiểm tra thanh toán
+
+### Quản lý Hóa đơn
+- Danh sách + chi tiết hóa đơn
+- Lọc theo ngày, trạng thái (Pending / Paid / Cancelled)
+- Cập nhật trạng thai đơn hàng
+
+### Báo cáo
+- Doanh thu theo ngày / tuần / tháng (biểu đồ OxyPlot)
+- Top sách bán chạy, cảnh báo hết hàng, sách bán chậm
+- Xuất CSV / Excel / PDF
 
 ---
 
 ## Thanh toán QR
 
-### Cấu hình Payment
-
-`BookStoreApp/appsettings.json`:
+### Cấu hình trong `appsettings.json`
 
 ```json
 {
@@ -230,19 +249,37 @@ File `appsettings.json` được copy ra output directory mỗi khi build.
 }
 ```
 
-| Provider | File | Mô tả |
-|----------|------|-------|
-| **Demo** | `BLL/Payments/DemoPaymentProvider.cs` | Tạo QR giả lập, tự confirm sau 10 giây |
-| **MoMo** | `BLL/Payments/MomoPaymentProvider.cs` | API MoMo v2 sandbox (HMAC-SHA256) |
-| **VNPay** | `BLL/Payments/VNPayPaymentProvider.cs` | API VNPay sandbox (HMAC-SHA512) |
-
-Khi để trống credentials, hệ thống tự động fallback về **Demo**.
+| Provider | Mô tả |
+|----------|-------|
+| **Demo** | Giả lập QR, tự động confirm sau 10 giây. Mặc định khi chưa điền key. |
+| **MoMo** | Gọi API sandbox MoMo v2 (HMAC-SHA256). Cần PartnerCode, AccessKey, SecretKey. |
+| **VNPay** | Gọi API sandbox VNPay (HMAC-SHA512). Cần TmnCode, HashSecret. |
 
 ---
 
-## Tài khoản đăng nhập
+## Ghi chú phát triển
 
-| Username | Password | Vai trò |
-|----------|----------|---------|
-| `admin` | `1` | Admin (toàn quyền) |
-| `E` | `2` | Staff (POS + xem kho) |
+- Tất cả Form và UserControl dùng `.Designer.cs` để định nghĩa UI
+- `ServiceLocator` cung cấp dependency injection thủ công
+- Validation trả về `ValidationResult`, không throw exception cho business rules
+- Ghi log qua `Utilities.FileLogger` (file `logs/bookstore-{date}.log`)
+
+---
+
+## Xử lý lỗi thường gặp
+
+### Lỗi `A network-related or instance-specific error occurred...`
+- SQL Server chưa chạy → Mở Services.msc → tìm `SQL Server` → Start
+- Sai tên Server → Kiểm tra trong SSMS và sửa `appsettings.json`
+
+### Lỗi `Invalid object name 'Books'`
+- Chưa tạo bảng → Chạy lại `database/init-database.sql`
+
+### Lỗi `Login failed for user`
+- Sửa connection string thành Windows Authentication:
+  ```
+  Server=...;Database=BookStoreDb;Trusted_Connection=True;
+  ```
+
+### Build lỗi `NETSDK1045`
+- Chưa cài .NET 9 SDK → Tải và cài đặt từ https://dotnet.microsoft.com/download/dotnet/9.0
