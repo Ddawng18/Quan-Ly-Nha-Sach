@@ -11,7 +11,7 @@ public static class DbConnectionFactory
     // Connection string cho SQL Server LocalDB
     // (localdb)\MSSQLLocalDB là instance mặc định khi cài Visual Studio
     private static string _connectionString =
-        @"Server=localhost;Database=BookStoreDb;Trusted_Connection=True;TrustServerCertificate=True;";
+        @"Server=localhost;Database=QuanLyNhaSach;Trusted_Connection=True;TrustServerCertificate=True;";
 
     public static void Configure(string connectionString)
     {

@@ -98,7 +98,7 @@ Mở file `BookStoreApp/appsettings.json`:
 
 Ví dụ cho SQL Server Express:
 ```json
-"Server=.\SQLEXPRESS;Database=BookStoreDb;Trusted_Connection=True;TrustServerCertificate=True;"
+"Server=.\SQLEXPRESS;Database=QuanLyNhaSach;Trusted_Connection=True;TrustServerCertificate=True;"
 ```
 
 ### Bước 4: Kiểm tra kết nối
@@ -111,19 +111,19 @@ Build và chạy app. Nếu hiện form đăng nhập là thành công.
 
 App đọc từ bảng `Accounts`. Bạn cần tự insert tài khoản trong SQL:
 
-```sql
-USE BookStoreDb;
-INSERT INTO Accounts (Username, Password, Role, FullName, IsActive)
-VALUES ('admin', 'admin', 'Admin', N'Quản trị viên', 1);
-
-INSERT INTO Accounts (Username, Password, Role, FullName, IsActive)
-VALUES ('staff', 'staff', 'Staff', N'Nhân viên', 1);
-```
+Script SQL đã tạo sẵn 2 tài khoản:
 
 | Username | Password | Vai trò |
 |----------|----------|---------|
-| `admin` | `admin` | Admin (toàn quyền) |
-| `staff` | `staff` | Staff (POS + xem kho) |
+| `admin` | `1` | Admin (toàn quyền) |
+| `E` | `2` | Staff (POS + xem kho) |
+
+Nếu muốn thêm tài khoản khác, chạy lệnh SQL:
+```sql
+USE QuanLyNhaSach;
+INSERT INTO Accounts (Username, Password, Role, FullName, IsActive)
+VALUES ('staff', 'staff', 'Staff', N'Nhân viên', 1);
+```
 
 ---
 
