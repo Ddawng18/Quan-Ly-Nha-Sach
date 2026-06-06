@@ -246,13 +246,3 @@ Khi để trống credentials, hệ thống tự động fallback về **Demo**.
 |----------|----------|---------|
 | `admin` | `admin` | Admin (toàn quyền) |
 | `staff` | `staff` | Staff (POS + xem kho) |
-
----
-
-## Ghi chú phát triển
-
-- Tất cả Form và UserControl đều sử dụng `.Designer.cs` để định nghĩa UI, không tạo control động trong code-behind
-- `PosForm` — form bán hàng POS đầy đủ (tách ra từ `OrderCreateForm` cũ)
-- `OrderCreateForm` — form tạo đơn hàng đơn giản
-- Validation trả về `ValidationResult`, không throw exception cho business rules
-- Ghi log qua `Utilities.FileLogger`
