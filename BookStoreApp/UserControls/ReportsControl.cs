@@ -124,17 +124,17 @@ public partial class ReportsControl : UserControl
 
     private void cboReportType_SelectedIndexChanged(object sender, EventArgs e) => LoadReports();
 
-    private void btnExportCsv_Click(object sender, EventArgs e) => ExportReport((path, section) => ReportExporter.ExportToCsv(section, path), "csv");
+    private void btnExportCsv_Click(object sender, EventArgs e) => ExportReport((path, section) => ReportExporter.ExportToCsv(section, path), "csv", "CSV files (*.csv)|*.csv");
 
-    private void btnExportPdf_Click(object sender, EventArgs e) => ExportReport((path, section) => ReportExporter.ExportToPdf(section, path), "txt");
+    private void btnExportPdf_Click(object sender, EventArgs e) => ExportReport((path, section) => ReportExporter.ExportToPdf(section, path), "pdf", "PDF files (*.pdf)|*.pdf");
 
-    private void btnExportExcel_Click(object sender, EventArgs e) => ExportReport((path, section) => ReportExporter.ExportToCsv(section, path), "csv");
+    private void btnExportExcel_Click(object sender, EventArgs e) => ExportReport((path, section) => ReportExporter.ExportToExcel(section, path), "xls", "Excel files (*.xls)|*.xls");
 
-    private void ExportReport(Action<string, ReportSectionDto> export, string extension)
+    private void ExportReport(Action<string, ReportSectionDto> export, string extension, string filter)
     {
         using var dialog = new SaveFileDialog
         {
-            Filter = extension == "txt" ? "Text files (*.txt)|*.txt" : "CSV files (*.csv)|*.csv",
+            Filter = filter,
             FileName = $"{GetCurrentSection().SectionName.Replace(' ', '_')}.{extension}"
         };
 
