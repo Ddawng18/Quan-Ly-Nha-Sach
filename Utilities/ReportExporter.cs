@@ -33,7 +33,6 @@ public static class ReportExporter
         sb.AppendLine($"<h2>{EscapeHtml(section.SectionName)}</h2>");
         sb.AppendLine("<table>");
 
-        // Header row
         sb.AppendLine("<tr>");
         foreach (var h in section.Headers)
         {
@@ -41,7 +40,6 @@ public static class ReportExporter
         }
         sb.AppendLine("</tr>");
 
-        // Data rows
         foreach (var row in section.Rows)
         {
             sb.AppendLine("<tr>");

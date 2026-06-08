@@ -15,8 +15,6 @@ static class Program
     [STAThread]
     static void Main()
     {
-        // Đọc connection string và cấu hình DbConnectionFactory
-        // trước khi ServiceLocator khởi tạo bất kỳ Repository nào
         ConfigureDatabase();
 
         ApplicationConfiguration.Initialize();
@@ -41,7 +39,6 @@ static class Program
         }
         catch
         {
-            // Nếu đọc config thất bại, dùng connection string mặc định trong DbConnectionFactory
         }
     }
 

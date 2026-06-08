@@ -51,7 +51,6 @@ public class ImportRepository : IImportRepository
         using var tran = conn.BeginTransaction();
         try
         {
-            // 1. Insert ImportReceipt
             using var cmdReceipt = new SqlCommand(@"
                 INSERT INTO ImportReceipts
                     (SupplierID, EmployeeID, ImportDate, TotalAmount, Note)
@@ -69,7 +68,6 @@ public class ImportRepository : IImportRepository
 
             receipt.ImportID = (int)cmdReceipt.ExecuteScalar();
 
-            // 2. Insert ImportDetails và cập nhật tồn kho
             foreach (var d in details)
             {
                 using var cmdDetail = new SqlCommand(@"
@@ -88,7 +86,6 @@ public class ImportRepository : IImportRepository
                 cmdDetail.Parameters.AddWithValue("@sub",   d.Subtotal);
                 cmdDetail.ExecuteNonQuery();
 
-                // Cộng dồn tồn kho và cập nhật ngày nhập cuối
                 using var cmdStock = new SqlCommand(@"
                     UPDATE Books SET
                         QuantityInStock = QuantityInStock + @qty,
@@ -114,7 +111,6 @@ public class ImportRepository : IImportRepository
         }
     }
 
-    // ── helper ────────────────────────────────────────────────
     private static IReadOnlyList<ImportReceiptViewDto> FetchReceipts(int? supplierId)
     {
         var list = new List<ImportReceiptViewDto>();

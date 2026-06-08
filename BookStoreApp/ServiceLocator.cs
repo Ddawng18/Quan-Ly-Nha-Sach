@@ -4,14 +4,8 @@ using BookStoreApp.DAL.Repositories;
 
 namespace BookStoreApp;
 
-/// <summary>
-/// Manual dependency injection root.
-/// All UI controls and forms obtain their service dependencies from here
-/// instead of constructing concrete implementations directly.
-/// </summary>
 public static class ServiceLocator
 {
-    // Repositories — SQL Server
     private static readonly IBookRepository      BookRepo      = new BookRepository();
     private static readonly ICustomerRepository  CustomerRepo  = new CustomerRepository();
     private static readonly IEmployeeRepository  EmployeeRepo  = new EmployeeRepository();
@@ -23,11 +17,9 @@ public static class ServiceLocator
     private static readonly IReportRepository    ReportRepo    = new ReportRepository();
     private static readonly IImportRepository    ImportRepo    = new ImportRepository();
 
-    // Shared service instances
     private static readonly ILoyaltyService LoyaltySvc = new LoyaltyService();
     private static readonly IOrderService   OrderSvc;
 
-    // Public service accessors
     public static IBookService      BookService      { get; }
     public static ICategoryService  CategoryService  { get; }
     public static ICustomerService  CustomerService  { get; }
@@ -44,7 +36,6 @@ public static class ServiceLocator
     {
         OrderSvc = new OrderService(OrderRepo, BookRepo);
 
-        // BookService nhận thêm CategoryRepo để không cần FakeDatabase
         BookService      = new BookService(BookRepo, CategoryRepo);
         CategoryService  = new CategoryService(CategoryRepo);
         CustomerService  = new CustomerService(CustomerRepo);
