@@ -37,8 +37,16 @@ public partial class PosForm : Form
         cboBook.ValueMember = nameof(Book.BookID);
         cboBook.DataSource = books;
 
+        cboLineDiscountType.Items.Clear();
+        cboLineDiscountType.Items.AddRange(Enum.GetNames(typeof(DiscountType)).Cast<object>().ToArray());
         cboLineDiscountType.SelectedItem = DiscountType.None.ToString();
+        
+        cboOrderDiscountType.Items.Clear();
+        cboOrderDiscountType.Items.AddRange(Enum.GetNames(typeof(DiscountType)).Cast<object>().ToArray());
         cboOrderDiscountType.SelectedItem = DiscountType.None.ToString();
+        
+        cboPaymentMethod.Items.Clear();
+        cboPaymentMethod.Items.AddRange(new[] { "Cash", "QR Payment" });
         cboPaymentMethod.SelectedIndex = 0;
 
         numOrderDiscount.ValueChanged += (_, _) => RefreshLines();
@@ -184,7 +192,7 @@ public partial class PosForm : Form
             CustomerID = customerId,
             EmployeeID = employeeId,
             PaymentStatus = cboPaymentStatus.SelectedItem?.ToString() ?? OrderStatus.Pending,
-            PaymentMethod = "Cash",
+            PaymentMethod = cboPaymentMethod.SelectedItem?.ToString() ?? "Cash",
             OrderDiscountType = ParseDiscountType(cboOrderDiscountType),
             OrderDiscountValue = numOrderDiscount.Value,
             TaxRate = numTaxRate.Value,
