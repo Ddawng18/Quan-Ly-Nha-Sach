@@ -1,3 +1,5 @@
+using BookStoreApp.Theme;
+
 namespace BookStoreApp.UserControls;
 
 partial class ImportControl
@@ -25,33 +27,32 @@ partial class ImportControl
         // ── Toolbar ──────────────────────────────────────────
         btnNewImport = new Button
         {
-            Text      = "+ Lập đơn nhập hàng",
+            Text      = "New Import",
             Location  = new Point(12, 12),
-            Width     = 160, Height = 30,
-            BackColor = Color.FromArgb(0, 122, 204),
-            ForeColor = Color.White,
-            FlatStyle = FlatStyle.Flat
+            Width     = 160, Height = 30
         };
+        AppTheme.StyleActionButton(btnNewImport, AppTheme.Add);
         btnNewImport.Click += btnNewImport_Click;
 
         btnRefresh = new Button
         {
-            Text     = "↺ Làm mới",
+            Text     = "Refresh",
             Location = new Point(182, 12),
             Width    = 90, Height = 30
         };
+        AppTheme.StyleRefreshButton(btnRefresh);
         btnRefresh.Click += btnRefresh_Click;
 
         lblFilterSupplier = new Label
         {
-            Text     = "Lọc theo NCC:",
+            Text     = "Filter by Supplier:",
             Location = new Point(290, 18),
             AutoSize = true
         };
 
         cboFilterSupplier = new ComboBox
         {
-            Location      = new Point(380, 14),
+            Location      = new Point(420, 14),
             Width         = 220,
             DropDownStyle = ComboBoxStyle.DropDownList
         };
@@ -75,7 +76,7 @@ partial class ImportControl
         // ── Chi tiết phiếu ───────────────────────────────────
         lblDetailTitle = new Label
         {
-            Text     = "Chi tiết phiếu nhập:",
+            Text     = "Import Details:",
             Location = new Point(12, 344),
             AutoSize = true,
             Font     = new Font(Font.FontFamily, 9, FontStyle.Bold)

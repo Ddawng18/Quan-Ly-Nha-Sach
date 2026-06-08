@@ -1,3 +1,5 @@
+using BookStoreApp.Theme;
+
 namespace BookStoreApp.Forms;
 
 partial class ImportForm
@@ -45,9 +47,9 @@ partial class ImportForm
         lblSupplier.AutoSize = true;
         lblSupplier.Location = new Point(12, 16);
         lblSupplier.Name = "lblSupplier";
-        lblSupplier.Size = new Size(89, 20);
+        lblSupplier.Size = new Size(67, 20);
         lblSupplier.TabIndex = 0;
-        lblSupplier.Text = "Nhà cung cấp:";
+        lblSupplier.Text = "Supplier:";
         // 
         // cboSupplier
         // 
@@ -62,9 +64,9 @@ partial class ImportForm
         lblEmployee.AutoSize = true;
         lblEmployee.Location = new Point(12, 48);
         lblEmployee.Name = "lblEmployee";
-        lblEmployee.Size = new Size(76, 20);
+        lblEmployee.Size = new Size(78, 20);
         lblEmployee.TabIndex = 2;
-        lblEmployee.Text = "Nhân viên:";
+        lblEmployee.Text = "Employee:";
         // 
         // cboEmployee
         // 
@@ -79,9 +81,9 @@ partial class ImportForm
         lblBook.AutoSize = true;
         lblBook.Location = new Point(12, 80);
         lblBook.Name = "lblBook";
-        lblBook.Size = new Size(35, 20);
+        lblBook.Size = new Size(46, 20);
         lblBook.TabIndex = 4;
-        lblBook.Text = "Sách:";
+        lblBook.Text = "Book:";
         // 
         // cboBook
         // 
@@ -96,9 +98,9 @@ partial class ImportForm
         lblQty.AutoSize = true;
         lblQty.Location = new Point(12, 112);
         lblQty.Name = "lblQty";
-        lblQty.Size = new Size(67, 20);
+        lblQty.Size = new Size(68, 20);
         lblQty.TabIndex = 6;
-        lblQty.Text = "Số lượng:";
+        lblQty.Text = "Quantity:";
         // 
         // numQuantity
         // 
@@ -115,48 +117,49 @@ partial class ImportForm
         lblPrice.AutoSize = true;
         lblPrice.Location = new Point(12, 144);
         lblPrice.Name = "lblPrice";
-        lblPrice.Size = new Size(84, 20);
+        lblPrice.Size = new Size(138, 20);
         lblPrice.TabIndex = 8;
-        lblPrice.Text = "Giá nhập (đ):";
+        lblPrice.Text = "Import Price (VND):";
         // 
         // numImportPrice
         // 
-        numImportPrice.DecimalPlaces = 0;
-        numImportPrice.Location = new Point(120, 141);
+        numImportPrice.Location = new Point(156, 142);
         numImportPrice.Maximum = new decimal(new int[] { 99999999, 0, 0, 0 });
         numImportPrice.Name = "numImportPrice";
         numImportPrice.Size = new Size(120, 27);
         numImportPrice.TabIndex = 9;
         numImportPrice.ThousandsSeparator = true;
+        numImportPrice.ValueChanged += numImportPrice_ValueChanged;
         // 
         // btnAddLine
-        // 
-        btnAddLine.Location = new Point(250, 141);
+        //
+        btnAddLine.Location = new Point(286, 142);
         btnAddLine.Name = "btnAddLine";
         btnAddLine.Size = new Size(130, 26);
         btnAddLine.TabIndex = 10;
-        btnAddLine.Text = "+ Thêm vào đơn";
-        btnAddLine.UseVisualStyleBackColor = true;
+        btnAddLine.Text = "+ Add to Receipt";
         btnAddLine.Click += btnAddLine_Click;
-        // 
+        AppTheme.StyleActionButton(btnAddLine, AppTheme.Add);
+        //
         // btnRemoveLine
-        // 
-        btnRemoveLine.Location = new Point(390, 141);
+        //
+        btnRemoveLine.Location = new Point(426, 142);
         btnRemoveLine.Name = "btnRemoveLine";
         btnRemoveLine.Size = new Size(90, 26);
         btnRemoveLine.TabIndex = 11;
-        btnRemoveLine.Text = "Xóa dòng";
-        btnRemoveLine.UseVisualStyleBackColor = true;
+        btnRemoveLine.Text = "Remove Line";
         btnRemoveLine.Click += btnRemoveLine_Click;
+        AppTheme.StyleActionButton(btnRemoveLine, AppTheme.Delete);
         // 
         // dgvLines
         // 
         dgvLines.AllowUserToAddRows = false;
         dgvLines.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-        dgvLines.BackgroundColor = SystemColors.Window;
+        dgvLines.ColumnHeadersHeight = 29;
         dgvLines.Location = new Point(12, 182);
         dgvLines.Name = "dgvLines";
         dgvLines.ReadOnly = true;
+        dgvLines.RowHeadersWidth = 51;
         dgvLines.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         dgvLines.Size = new Size(780, 250);
         dgvLines.TabIndex = 12;
@@ -167,18 +170,18 @@ partial class ImportForm
         lblTotal.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
         lblTotal.Location = new Point(12, 442);
         lblTotal.Name = "lblTotal";
-        lblTotal.Size = new Size(120, 23);
+        lblTotal.Size = new Size(111, 23);
         lblTotal.TabIndex = 13;
-        lblTotal.Text = "Tổng tiền: 0 đ";
+        lblTotal.Text = "Total: 0 VND";
         // 
         // lblNote
         // 
         lblNote.AutoSize = true;
         lblNote.Location = new Point(12, 470);
         lblNote.Name = "lblNote";
-        lblNote.Size = new Size(57, 20);
+        lblNote.Size = new Size(45, 20);
         lblNote.TabIndex = 14;
-        lblNote.Text = "Ghi chú:";
+        lblNote.Text = "Note:";
         // 
         // txtNote
         // 
@@ -188,32 +191,30 @@ partial class ImportForm
         txtNote.TabIndex = 15;
         // 
         // btnSave
-        // 
-        btnSave.BackColor = Color.FromArgb(0, 122, 204);
-        btnSave.FlatStyle = FlatStyle.Flat;
-        btnSave.ForeColor = Color.White;
+        //
         btnSave.Location = new Point(120, 508);
         btnSave.Name = "btnSave";
         btnSave.Size = new Size(120, 30);
         btnSave.TabIndex = 16;
-        btnSave.Text = "Lưu đơn nhập";
-        btnSave.UseVisualStyleBackColor = false;
+        btnSave.Text = "Save Import Receipt";
         btnSave.Click += btnSave_Click;
-        // 
+        AppTheme.StyleActionButton(btnSave, AppTheme.Add);
+        //
         // btnCancel
-        // 
+        //
         btnCancel.Location = new Point(250, 508);
         btnCancel.Name = "btnCancel";
         btnCancel.Size = new Size(80, 30);
         btnCancel.TabIndex = 17;
-        btnCancel.Text = "Hủy";
-        btnCancel.UseVisualStyleBackColor = true;
+        btnCancel.Text = "Cancel";
         btnCancel.Click += btnCancel_Click;
+        AppTheme.StyleRefreshButton(btnCancel);
         // 
         // ImportForm
         // 
         AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
+        BackColor = AppTheme.MainBackground;
         ClientSize = new Size(820, 558);
         Controls.Add(lblSupplier);
         Controls.Add(cboSupplier);
@@ -237,7 +238,7 @@ partial class ImportForm
         MaximizeBox = false;
         Name = "ImportForm";
         StartPosition = FormStartPosition.CenterParent;
-        Text = "Lập đơn nhập hàng";
+        Text = "Import Books";
         ((System.ComponentModel.ISupportInitialize)numQuantity).EndInit();
         ((System.ComponentModel.ISupportInitialize)numImportPrice).EndInit();
         ((System.ComponentModel.ISupportInitialize)dgvLines).EndInit();
