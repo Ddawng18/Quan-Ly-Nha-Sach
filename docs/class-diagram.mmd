@@ -1,0 +1,253 @@
+classDiagram
+    direction TB
+
+    %% ============== DTO ==============
+    class Book {
+        +int BookID
+        +int CategoryID
+        +int SupplierID
+        +string Title
+        +string Author
+        +decimal SellPrice
+        +int QuantityInStock
+        +bool IsDeleted
+    }
+    class Customer {
+        +int CustomerID
+        +string FullName
+        +string Phone
+        +int LoyaltyPoints
+    }
+    class Employee {
+        +int EmployeeID
+        +string FullName
+        +string Role
+        +decimal Salary
+    }
+    class Order {
+        +int OrderID
+        +int CustomerID
+        +int EmployeeID
+        +DateTime OrderDate
+        +decimal TotalAmount
+        +string PaymentStatus
+    }
+    class OrderDetail {
+        +int OrderDetailID
+        +int OrderID
+        +int BookID
+        +int Quantity
+        +decimal UnitPrice
+    }
+    class Category {
+        +int CategoryID
+        +string CategoryName
+    }
+    class Supplier {
+        +int SupplierID
+        +string SupplierName
+    }
+    class Account {
+        +int AccountID
+        +string Username
+        +string Password
+        +string Role
+    }
+    class CartLine {
+        +int BookID
+        +int Quantity
+        +decimal UnitPrice
+    }
+    class CheckoutRequest {
+        +int CustomerID
+        +int EmployeeID
+        +List~CartLine~ Lines
+    }
+
+    %% ============== DAL ==============
+    class DbConnectionFactory {
+        +Create() SqlConnection$
+    }
+
+    class IBookRepository {
+        <<interface>>
+        +GetAll() List~Book~
+        +GetById(int) Book?
+        +Add(Book)
+        +Update(Book)
+        +Delete(int)
+    }
+    class BookRepository {
+    }
+
+    class IOrderRepository {
+        <<interface>>
+        +GetAll()
+        +GetByDateRange()
+        +CreateOrder(Order, List~OrderDetail~)
+    }
+    class OrderRepository {
+    }
+
+    class ICustomerRepository {
+        <<interface>>
+        +GetAll() List~Customer~
+        +Add(Customer)
+        +Update(Customer)
+        +Delete(int)
+    }
+    class CustomerRepository {
+    }
+
+    class IAccountRepository {
+        <<interface>>
+        +GetByUsername(string) Account?
+    }
+    class AccountRepository {
+    }
+
+    %% ============== BLL ==============
+    class IBookService {
+        <<interface>>
+        +GetBooks() List~Book~
+        +GetBook(int) Book?
+        +AddBook(Book)
+        +UpdateBook(Book)
+        +DeleteBook(int)
+    }
+    class BookService {
+    }
+
+    class IPosService {
+        <<interface>>
+        +AddOrUpdateLine(...)
+        +CalculateTotals(...)
+        +PrepareCheckout(CheckoutRequest)
+        +CompleteCheckout(...)
+    }
+    class PosService {
+    }
+
+    class IAuthService {
+        <<interface>>
+        +Login(string, string) Account?
+    }
+    class AuthService {
+    }
+
+    class IPaymentProvider {
+        <<interface>>
+        +CreatePaymentAsync(...)
+        +QueryStatusAsync(...)
+    }
+    class DemoPaymentProvider {
+    }
+    class MomoPaymentProvider {
+    }
+    class VNPayPaymentProvider {
+    }
+    class PaymentProviderFactory {
+        +Create(config) IPaymentProvider$
+    }
+
+    %% ============== UI ==============
+    class ServiceLocator {
+        <<static>>
+        +BookService IBookService
+        +PosService IPosService
+        +AuthService IAuthService
+        +CustomerService ICustomerService
+        +EmployeeService IEmployeeService
+        +OrderService IOrderService
+        +ReportService IReportService
+        +CategoryService ICategoryService
+        +SupplierService ISupplierService
+        +DashboardService IDashboardService
+    }
+
+    class PosForm {
+        +btnAddLine_Click()
+        +btnSave_Click()
+        +btnPayWithQr_Click()
+    }
+    class OrderCreateForm {
+    }
+    class BookEditForm {
+    }
+    class MainForm {
+        +LoadControl(UserControl)
+    }
+
+    %% ============== UTIL ==============
+    class FileLogger {
+        +Info(string)$
+        +Error(string)$
+    }
+    class ReportExporter {
+        +ExportToCsv(...)$
+        +ExportToExcel(...)$
+        +ExportToPdf(...)$
+    }
+
+    %% ======== RELATIONSHIPS ========
+
+    %% DAL
+    IBookRepository <|.. BookRepository
+    IOrderRepository <|.. OrderRepository
+    ICustomerRepository <|.. CustomerRepository
+    IAccountRepository <|.. AccountRepository
+    BookRepository --> DbConnectionFactory : uses
+    OrderRepository --> DbConnectionFactory : uses
+    CustomerRepository --> DbConnectionFactory : uses
+    AccountRepository --> DbConnectionFactory : uses
+    BookRepository ..> Book : returns
+    OrderRepository ..> Order : returns
+    OrderRepository ..> OrderDetail : uses
+    CustomerRepository ..> Customer : returns
+    AccountRepository ..> Account : returns
+
+    %% BLL
+    IBookService <|.. BookService
+    IPosService <|.. PosService
+    IAuthService <|.. AuthService
+    IPaymentProvider <|.. DemoPaymentProvider
+    IPaymentProvider <|.. MomoPaymentProvider
+    IPaymentProvider <|.. VNPayPaymentProvider
+
+    BookService --> IBookRepository : injects
+    PosService --> IBookRepository : injects
+    PosService --> ICustomerRepository : injects
+    PosService --> IOrderRepository : injects
+    AuthService --> IAccountRepository : injects
+
+    PaymentProviderFactory ..> DemoPaymentProvider : creates
+    PaymentProviderFactory ..> MomoPaymentProvider : creates
+    PaymentProviderFactory ..> VNPayPaymentProvider : creates
+
+    %% UI
+    ServiceLocator --> IBookService : wires
+    ServiceLocator --> IPosService : wires
+    ServiceLocator --> IAuthService : wires
+    ServiceLocator --> ICustomerService : wires
+    ServiceLocator --> IEmployeeService : wires
+    ServiceLocator --> IOrderService : wires
+    ServiceLocator --> IReportService : wires
+    ServiceLocator --> ICategoryService : wires
+    ServiceLocator --> ISupplierService : wires
+    ServiceLocator --> IDashboardService : wires
+
+    PosForm --> ServiceLocator : uses
+    PosForm --> IBookService
+    PosForm --> ICustomerService
+    PosForm --> IEmployeeService
+    PosForm --> IPosService
+    PosForm ..> CartLine : uses
+    PosForm ..> CheckoutRequest : uses
+
+    OrderCreateForm --> ServiceLocator : uses
+    OrderCreateForm --> IOrderService
+    OrderCreateForm ..> OrderDetail : uses
+
+    BookEditForm --> ServiceLocator : uses
+    BookEditForm ..> Book : edits
+    MainForm --> ServiceLocator : uses

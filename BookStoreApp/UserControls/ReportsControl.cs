@@ -22,7 +22,8 @@ public partial class ReportsControl : UserControl
         ("Revenue By Month", s => s.GetRevenueByPeriodReport("Month")),
         ("Best Selling Books", s => s.GetBestSellingBooksReport()),
         ("Low Stock", s => s.GetLowStockReport()),
-        ("Slow Moving (90 days)", s => s.GetSlowMovingReport())
+        ("Slow Moving (90 days)", s => s.GetSlowMovingReport()),
+        ("Import History", s => s.GetImportReport())
     ];
 
     public ReportsControl()

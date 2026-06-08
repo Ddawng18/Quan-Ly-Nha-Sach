@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kiểm Toán Độc Lập — Hệ Thống Quản Lý Nhà Sách</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --red: #f85149;
+    --green: #3fb950;
+    --yellow: #d2991d;
+    --orange: #f0883e;
+    --purple: #a371f7;
+    --code-bg: #1c2128;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  h1 { font-size:2rem; border-bottom:2px solid var(--border); padding-bottom:0.5rem; margin-bottom:1rem; }
+  h2 { font-size:1.5rem; margin:2rem 0 1rem; color: var(--accent); border-bottom:1px solid var(--border); padding-bottom:0.3rem; }
+  h3 { font-size:1.15rem; margin:1.5rem 0 0.75rem; color: var(--text); }
+  h4 { font-size:1rem; margin:1rem 0 0.5rem; color: var(--muted); }
+  p, li { margin-bottom:0.5rem; }
+  a { color: var(--accent); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  code {
+    background: var(--code-bg);
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-family: 'Cascadia Code', 'JetBrains Mono', 'Fira Code', monospace;
+  }
+  pre {
+    background: var(--code-bg);
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 0.75rem 0;
+    border: 1px solid var(--border);
+  }
+  pre code { background:none; padding:0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.9em;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+  }
+  th {
+    background: var(--card);
+    font-weight: 600;
+  }
+  tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+  .score-card {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  .score-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+  }
+  .score-box .label { font-size:0.85rem; color:var(--muted); }
+  .score-box .value { font-size:2rem; font-weight:700; }
+  .score-box .max { font-size:0.8rem; color:var(--muted); }
+  .red { color: var(--red); }
+  .green { color: var(--green); }
+  .yellow { color: var(--yellow); }
+  .orange { color: var(--orange); }
+  .purple { color: var(--purple); }
+  .badge {
+    display: inline-block;
+    padding: 0.2em 0.6em;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: 600;
+  }
+  .badge-critical { background:rgba(248,81,73,0.15); color:var(--red); }
+  .badge-high { background:rgba(240,136,62,0.15); color:var(--orange); }
+  .badge-medium { background:rgba(210,153,29,0.15); color:var(--yellow); }
+  .badge-low { background:rgba(139,148,158,0.15); color:var(--muted); }
+  .badge-pass { background:rgba(63,185,80,0.15); color:var(--green); }
+  .badge-fail { background:rgba(248,81,73,0.15); color:var(--red); }
+  .verdict-box {
+    background: var(--card);
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin: 1rem 0;
+  }
+  .bug-box {
+    background: rgba(248,81,73,0.08);
+    border-left: 4px solid var(--red);
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 0 8px 8px 0;
+  }
+  .info-box {
+    background: rgba(88,166,255,0.08);
+    border-left: 4px solid var(--accent);
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 0 8px 8px 0;
+  }
+  hr { border:none; border-top:1px solid var(--border); margin:2rem 0; }
+  ul, ol { padding-left:1.5rem; margin-bottom:0.75rem; }
+  .toc { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:1rem 1.5rem; margin:1rem 0; }
+  .toc ol { margin-bottom:0; }
+  .match-yes { color: var(--green); font-weight:600; }
+  .match-no { color: var(--red); font-weight:600; }
+  .match-partial { color: var(--orange); font-weight:600; }
+  .emoji { font-size:1.1em; }
+</style>
+</head>
+<body>
+
+<h1>🔍 Kiểm Toán Độc Lập Ứng Dụng Desktop — Hệ Thống Quản Lý Nhà Sách</h1>
+
+<p>
+  <strong>Kiểm toán viên:</strong> Zoo (Giám khảo độc lập)<br>
+  <strong>Ngày:</strong> 07/06/2026<br>
+  <strong>Dự án:</strong> Quản-Lý-Nhà-Sách — Hệ Thống Quản Lý Nhà Sách<br>
+  <strong>Nền tảng:</strong> .NET 9 Windows Forms (C#), SQL Server (ADO.NET)<br>
+  <strong>Nhóm:</strong> Nguyễn Huỳnh Đăng, Lê Công Bảo, Trần Đại Phát, Nguyễn Lâm Sỹ Phú, Bành Phát Thịnh<br>
+  <strong>Môn học:</strong> Phát Triển Ứng Dụng Desktop — Đồ Án Nhóm Đại Học
+</p>
+
+<hr>
+
+<div class="toc">
+  <h3 style="margin-top:0;">📋 Mục Lục</h3>
+  <ol>
+    <li><a href="#phuong-phap">Phương Pháp Kiểm Toán</a></li>
+    <li><a href="#tong-quan">Nhận Định Tổng Quan</a></li>
+    <li><a href="#diem-so">Ba Chế Độ Chấm Điểm</a></li>
+    <li><a href="#danh-gia-chuong-trinh">Đánh Giá Chương Trình</a></li>
+    <li><a href="#danh-gia-bao-cao">Đánh Giá Báo Cáo</a></li>
+    <li><a href="#doi-chieu">Đối Chiếu Báo Cáo ↔ Mã Nguồn</a></li>
+    <li><a href="#loi-nghiem-trong">Các Lỗi Nghiêm Trọng</a></li>
+    <li><a href="#loi-nho">Các Lỗi Nhỏ</a></li>
+    <li><a href="#don-dep">Đánh Giá Dọn Dẹp Mã Nguồn</a></li>
+    <li><a href="#phai-sua">Danh Sách Phải Sửa</a></li>
+    <li><a href="#nen-sua">Danh Sách Nên Sửa</a></li>
+    <li><a href="#toi-uu">Tối Ưu Tùy Chọn</a></li>
+    <li><a href="#muc-tieu">Mục Tiêu Cuối Cùng Đề Xuất</a></li>
+    <li><a href="#ket-luan">Phán Quyết Cuối Cùng</a></li>
+  </ol>
+</div>
+
+<!-- ====== PHƯƠNG PHÁP ====== -->
+<h2 id="phuong-phap">1. Phương Pháp Kiểm Toán</h2>
+<p>
+  Mọi tệp trong không gian làm việc đều đã được kiểm tra. Báo cáo (<code>Desktop.pdf</code>) được đối chiếu với mã nguồn từng dòng cho mọi tuyên bố chính. Tập lệnh cơ sở dữ liệu, tất cả các lớp BLL/DAL/DTO, tất cả Forms/UserControls, các trình cung cấp thanh toán, tiện ích, tệp cấu hình và tài liệu đều đã được đọc toàn bộ. Cuộc kiểm toán này bắt đầu từ con số không — không có đánh giá trước nào được giả định.
+</p>
+
+<!-- ====== TỔNG QUAN ====== -->
+<h2 id="tong-quan">2. Nhận Định Tổng Quan</h2>
+
+<div class="verdict-box">
+  <p>
+    <strong>Loại dự án:</strong> Ứng dụng quản lý nhà sách desktop sử dụng kiến trúc phân lớp (DTO/DAL/BLL/UI) với Windows Forms, ADO.NET và tích hợp thanh toán QR.
+  </p>
+  <p>
+    <strong>Phán quyết:</strong> Một dự án gần như hoàn chỉnh, có cấu trúc tốt, thể hiện sự hiểu biết vững chắc về kiến trúc phân lớp, tích hợp SQL Server và thiết kế giao diện desktop — bị ảnh hưởng bởi <strong>một lỗi nghiêm trọng về toàn vẹn dữ liệu</strong> và <strong>những điểm không chính xác trong báo cáo</strong>.
+  </p>
+</div>
+
+<div class="score-card">
+  <div class="score-box">
+    <div class="label">Chương Trình / Demo</div>
+    <div class="value yellow">2.5</div>
+    <div class="max">/ 4</div>
+  </div>
+  <div class="score-box">
+    <div class="label">Báo Cáo</div>
+    <div class="value yellow">2.5</div>
+    <div class="max">/ 4</div>
+  </div>
+  <div class="score-box">
+    <div class="label">Tổng</div>
+    <div class="value yellow">5.0</div>
+    <div class="max">/ 8</div>
+  </div>
+</div>
+
+<h3>Điểm Mạnh Nhất</h3>
+<ol>
+  <li>Kiến trúc 4 lớp rõ ràng với phân tách interface đúng đắn</li>
+  <li>Hệ thống POS hoàn chỉnh với giỏ hàng, giảm giá, thuế, điểm tích lũy</li>
+  <li>Tích hợp đầy đủ MoMo/VNPay với chữ ký HMAC chính xác</li>
+  <li>Hỗ trợ transaction trong tạo đơn hàng với rollback</li>
+  <li>Phong cách lập trình và quy ước đặt tên nhất quán toàn bộ dự án</li>
+</ol>
+
+<h3>Điểm Yếu Nhất</h3>
+<ol>
+  <li><strong class="red">NGHIÊM TRỌNG: Trừ kho không bao giờ được lưu vào cơ sở dữ liệu</strong> (chỉ trên bộ nhớ)</li>
+  <li><strong>Mật khẩu lưu và so sánh dạng plaintext</strong> — không hề có băm</li>
+  <li>Báo cáo phóng đại số bảng (tuyên bố 10, thực tế 8) và trình bày sai về xuất PDF</li>
+  <li>Không có ảnh chụp màn hình trong báo cáo — chỉ có tham chiếu placeholder</li>
+  <li>Không kiểm tra trùng ISBN trước khi chèn vào DB</li>
+</ol>
+
+<h3>Sửa Chữa Khẩn Cấp Nhất</h3>
+<ol>
+  <li>Gọi <code>_bookRepository.UpdateStock()</code> trong <code>PosService.CompleteCheckout()</code> tại <a href="#"><code>BLL/PosService.cs:184</code></a></li>
+  <li>Băm mật khẩu với BCrypt hoặc tối thiểu SHA256</li>
+  <li>Thêm kiểm tra trùng ISBN trong <code>BookService.AddBook()</code> tại <a href="#"><code>BLL/BookService.cs:80</code></a></li>
+</ol>
+
+<!-- ====== BA CHẾ ĐỘ CHẤM ĐIỂM ====== -->
+<h2 id="diem-so">3. Ba Chế Độ Chấm Điểm Của Giảng Viên</h2>
+
+<h3>🔴 Chế Độ Nghiêm Khắc (thang 10/10 — Hướng Sản Xuất)</h3>
+
+<div class="score-card">
+  <div class="score-box">
+    <div class="label">Chương Trình / Demo</div>
+    <div class="value red">2.0</div>
+    <div class="max">/ 4</div>
+  </div>
+  <div class="score-box">
+    <div class="label">Báo Cáo</div>
+    <div class="value red">1.5</div>
+    <div class="max">/ 4</div>
+  </div>
+  <div class="score-box">
+    <div class="label">Tổng</div>
+    <div class="value red">3.5</div>
+    <div class="max">/ 8</div>
+  </div>
+</div>
+
+<p><strong>Lý do:</strong> Dưới tiêu chuẩn sản xuất nghiêm ngặt, lỗi trừ kho không lưu là thảm họa — ứng dụng không thể hoàn thành chức năng cốt lõi là quản lý tồn kho. Mật khẩu plaintext vi phạm yêu cầu bảo mật cơ bản. Báo cáo đưa ra tuyên bố sai có thể chứng minh (10 bảng, băm mật khẩu, xuất PDF). Không có ảnh chụp màn hình. Xuất PDF giả (ký tự box-drawing lưu dưới dạng <code>.pdf</code>) gây hiểu nhầm. Nhiều khối catch rỗng nuốt lỗi âm thầm.</p>
+
+<p><strong>Các khoản trừ chính:</strong></p>
+<ul>
+  <li>Lỗi trừ kho không lưu: <span class="red">−1.0</span> Chương Trình</li>
+  <li>Mật khẩu plaintext: <span class="red">−0.5</span> Chương Trình</li>
+  <li>Báo cáo sai sự thật (số bảng, băm, PDF): <span class="red">−1.5</span> Báo Cáo</li>
+  <li>Không có ảnh chụp màn hình: <span class="red">−0.5</span> Báo Cáo</li>
+  <li>Khả năng mở rộng tìm kiếm, catch rỗng, Service Locator: <span class="red">−0.5</span> Chương Trình</li>
+</ul>
+
+<hr>
+
+<h3>🟡 Chế Độ Bình Thường (thang 7/10 — Chấm điểm đại học thực tế)</h3>
+
+<div class="score-card">
+  <div class="score-box">
+    <div class="label">Chương Trình / Demo</div>
+    <div class="value yellow">3.0</div>
+    <div class="max">/ 4</div>
+  </div>
+  <div class="score-box">
+    <div class="label">Báo Cáo</div>
+    <div class="value yellow">2.5</div>
+    <div class="max">/ 4</div>
+  </div>
+  <div class="score-box">
+    <div class="label">Tổng</div>
+    <div class="value yellow">5.5</div>
+    <div class="max">/ 8</div>
+  </div>
+</div>
+
+<p><strong>Lý do:</strong> Đây là mức chấm đại học thực tế, ghi nhận nỗ lực thực sự và triển khai một phần. Ứng dụng có kiến trúc phân lớp vững chắc, CRUD hoạt động trên tất cả thực thể, POS chức năng với logic giảm giá/thuế/điểm tích lũy, tích hợp nhà cung cấp thanh toán thực, kiểm soát truy cập theo vai trò, và báo cáo với trực quan hóa biểu đồ. Lỗi kho nghiêm trọng bị trừ điểm nhưng phần còn lại của quy trình POS là chính xác. Báo cáo có cấu trúc tốt và bao quát đầy đủ yêu cầu, thiết kế và ca sử dụng, nhưng mất điểm vì tuyên bố không có căn cứ và thiếu ảnh chụp màn hình.</p>
+
+<p><strong>Các khoản trừ chính:</strong></p>
+<ul>
+  <li>Lỗi trừ kho không lưu: <span class="yellow">−0.5</span> Chương Trình</li>
+  <li>Mật khẩu plaintext: <span class="yellow">−0.25</span> Chương Trình</li>
+  <li>Báo cáo sai sự thật: <span class="yellow">−0.75</span> Báo Cáo</li>
+  <li>Không có ảnh chụp màn hình: <span class="yellow">−0.5</span> Báo Cáo</li>
+  <li>Tìm kiếm tải toàn bộ dữ liệu, Service Locator: <span class="yellow">−0.25</span> Chương Trình</li>
+</ul>
+
+<hr>
+
+<h3>🟢 Chế Độ Dễ Dãi (thang 5/10 — Khoan dung)</h3>
+
+<div class="score-card">
+  <div class="score-box">
+    <div class="label">Chương Trình / Demo</div>
+    <div class="value green">3.5</div>
+    <div class="max">/ 4</div>
+  </div>
+  <div class="score-box">
+    <div class="label">Báo Cáo</div>
+    <div class="value green">3.0</div>
+    <div class="max">/ 4</div>
+  </div>
+  <div class="score-box">
+    <div class="label">Tổng</div>
+    <div class="value green">6.5</div>
+    <div class="max">/ 8</div>
+  </div>
+</div>
+
+<p><strong>Lý do:</strong> Dưới chế độ chấm khoan dung, phạm vi tính năng được triển khai xứng đáng được ghi nhận đáng kể. Nhóm đã giải quyết: xác thực, CRUD sách/danh mục/nhà cung cấp, quản lý khách hàng với điểm tích lũy, quy trình POS đầy đủ, quản lý đơn hàng với chuyển đổi trạng thái, 7 loại báo cáo với biểu đồ OxyPlot, xuất CSV/Excel/text, thanh toán QR với MoMo/VNPay/Demo, ẩn thanh bên theo vai trò, hệ thống theme, ghi log tệp, và cấu trúc dự án rõ ràng. Đối với nhóm 5 người ở bậc đại học, đây là nỗ lực mạnh mẽ.</p>
+
+<p><strong>Các khoản trừ chính:</strong></p>
+<ul>
+  <li>Lỗi trừ kho không lưu: <span class="green">−0.25</span> Chương Trình</li>
+  <li>Mật khẩu plaintext: <span class="green">−0.25</span> Chương Trình</li>
+  <li>Báo cáo không chính xác: <span class="green">−0.5</span> Báo Cáo</li>
+  <li>Thiếu ảnh chụp màn hình: <span class="green">−0.5</span> Báo Cáo</li>
+</ul>
+
+<!-- ====== ĐÁNH GIÁ CHƯƠNG TRÌNH ====== -->
+<h2 id="danh-gia-chuong-trinh">4. Đánh Giá Chương Trình</h2>
+
+<h3>4.1 Kiến Trúc</h3>
+
+<p><strong>Mẫu kiến trúc được xác định:</strong> Kiến trúc phân lớp (4 tầng: DTO → DAL → BLL → UI) với các mẫu Repository và Service.</p>
+
+<pre><code>┌──────────────────────────────────────┐
+│  Tầng UI (WinForms)                  │  BookStoreApp/
+│  Forms, UserControls, ServiceLocator │
+├──────────────────────────────────────┤
+│  BLL (Tầng Logic Nghiệp Vụ)          │  BLL/
+│  Services, Validators, Payments      │
+├──────────────────────────────────────┤
+│  DAL (Tầng Truy Cập Dữ Liệu)         │  DAL/
+│  Repositories, DbConnectionFactory   │
+├──────────────────────────────────────┤
+│  DTO (Đối Tượng Truyền Dữ Liệu)      │  DTO/
+│  Models, Enums, ValidationResult     │
+├──────────────────────────────────────┤
+│  Utilities (Tiện Ích)                │  Utilities/
+│  FileLogger, ReportExporter          │
+└──────────────────────────────────────┘</code></pre>
+
+<p><strong>Mức độ phù hợp:</strong> Kiến trúc phân lớp hoàn toàn phù hợp cho ứng dụng quản lý nhà sách desktop ở phạm vi này. Sự phân tách trách nhiệm là thực sự — các repository chỉ xử lý truy cập dữ liệu, các service chứa logic nghiệp vụ và kiểm tra hợp lệ, UI ủy thác cho service.</p>
+
+<p><strong>Dependency Injection:</strong> Triển khai qua lớp tĩnh <code>ServiceLocator</code> thủ công tại <a href="#"><code>BookStoreApp/ServiceLocator.cs</code></a>. Tất cả phụ thuộc được nối dây trong constructor tĩnh dưới dạng singleton. Mặc dù hoạt động được, đây là <strong>mẫu anti-pattern Service Locator</strong> thay vì Dependency Injection thực sự. Tất cả thành phần UI đều tham chiếu cứng đến thuộc tính tĩnh <code>ServiceLocator.*</code>.</p>
+
+<p><strong>Điểm:</strong> <span class="yellow">7/10</span> (phân lớp rõ ràng, phân tách interface tốt, nhưng mẫu Service Locator và thiếu khả năng kiểm thử làm giảm điểm)</p>
+
+<h3>4.2 Thiết Kế Ứng Dụng Desktop</h3>
+
+<p><strong>Luồng khởi động:</strong> <code>Program.cs</code> → đọc <code>appsettings.json</code> → cấu hình <code>DbConnectionFactory</code> → khởi chạy <code>LoginForm</code> → khi thành công, mở <code>MainForm</code> với tham số vai trò.</p>
+
+<p><strong>Điều hướng:</strong> <code>MainForm</code> sử dụng thanh bên các nút. Mỗi lần nhấp nút tạo một <strong>instance mới</strong> của <code>UserControl</code> tương ứng và nạp vào <code>panelContent</code>. Điều này có nghĩa là:
+</p><ul>
+  <li>Trạng thái <strong>bị mất khi chuyển tab</strong> (không cache trạng thái lọc, vị trí cuộn...)</li>
+  <li>Truy vấn cơ sở dữ liệu mới chạy mỗi lần chuyển tab</li>
+  <li>Không gọi <code>Dispose()</code> trên control bị thay thế, tạo rò rỉ bộ nhớ tiềm ẩn</li>
+</ul>
+
+<p><strong>Giao tiếp form:</strong> Sử dụng <code>ShowDialog()</code> cho quy trình modal (BookEditForm, PosForm, PaymentQRForm). <code>DialogResult</code> được dùng để báo hiệu thành công/thất bại. Đây là thực hành WinForms chính xác.</p>
+
+<p><strong>Điểm:</strong> <span class="yellow">6/10</span> (điều hướng hoạt động, mẫu modal đúng, nhưng mất trạng thái khi chuyển tab, vấn đề bộ nhớ tiềm ẩn)</p>
+
+<h3>4.3 Thiết Kế Cơ Sở Dữ Liệu</h3>
+
+<p><strong>Lược đồ (8 bảng):</strong> <code>Categories</code>, <code>Suppliers</code>, <code>Books</code>, <code>Customers</code>, <code>Employees</code>, <code>Accounts</code>, <code>Orders</code>, <code>OrderDetails</code></p>
+
+<p><strong>Đánh giá chuẩn hóa:</strong> Đạt 3NF — không có phụ thuộc bắc cầu. Khóa ngoại được định nghĩa đúng. Ràng buộc UNIQUE trên <code>Books.ISBN</code>. Soft delete qua cờ bit <code>Books.IsDeleted</code>. Ràng buộc DEFAULT được sử dụng phù hợp.</p>
+
+<p><strong>Các vấn đề thiết kế:</strong></p>
+<ol>
+  <li><strong>Báo cáo tuyên bố 10 bảng; lược đồ thực tế có 8.</strong> Báo cáo đề cập đến bảng <code>ImportReceipt</code> và <code>ImportDetail</code> nhưng chúng không tồn tại trong <code>database.sql</code>.</li>
+  <li><code>Accounts.Password</code> lưu giá trị plaintext ('1', '2' trong dữ liệu mẫu) — cột tên là <code>Password</code> chứ không phải <code>PasswordHash</code> như báo cáo tuyên bố.</li>
+  <li><code>Accounts.EmployeeID</code> nullable nhưng về mặt khái niệm nên liên kết với nhân viên.</li>
+  <li>Không có chỉ mục ngoài khóa chính — hiệu suất truy vấn sẽ giảm ở quy mô lớn.</li>
+  <li><code>Customers</code> và <code>Employees</code> không có cơ chế soft-delete — sử dụng DELETE cứng có thể làm hỏng tham chiếu khóa ngoại.</li>
+</ol>
+
+<p><strong>Điểm:</strong> <span class="yellow">6.5/10</span> (chuẩn hóa đúng, ràng buộc tốt, nhưng thiếu chỉ mục, chiến lược soft-delete không nhất quán, báo cáo phóng đại số bảng)</p>
+
+<h3>4.4 UI/UX</h3>
+
+<p><strong>Hệ thống theme:</strong> Lớp <code>AppTheme</code> gắn kết với bảng màu nhất quán. <code>AppBranding</code> tải logo từ <code>Assets/app-logo.png</code>. Cả hai được áp dụng nhất quán trên các form và control.</p>
+
+<p><strong>Dashboard:</strong> Hiển thị metrics phong phú với 8 KPI, bảng đơn hàng gần đây, bảng sách bán chạy nhất.</p>
+
+<p><strong>Lưới dữ liệu:</strong> Định dạng cột cho tiền tệ (N2), ngày tháng, và căn chỉnh được áp dụng. Các cột lưới được cấu hình thủ công với độ rộng và chỉ mục hiển thị.</p>
+
+<p><strong>Form POS:</strong> Toàn diện với chọn khách hàng/nhân viên, dropdown sách với số lượng, giảm giá dòng và đơn hàng, thuế suất, đổi điểm tích lũy, nút thanh toán tiền mặt và QR.</p>
+
+<p><strong>Điểm yếu:</strong></p>
+<ul>
+  <li>Không có chỉ báo tải khi đang fetch dữ liệu</li>
+  <li>Không có phím tắt được ghi nhận</li>
+  <li>Không thể cấu hình cỡ chữ</li>
+  <li>Thiếu hộp thoại xác nhận khi đăng xuất</li>
+  <li><code>PaymentQRForm</code> tự động đóng sau 800ms — người dùng không kịp đọc thông báo thành công</li>
+</ul>
+
+<p><strong>Điểm:</strong> <span class="green">7/10</span> (theme gắn kết, bố cục chức năng, UX lọc tốt; thiếu trạng thái tải, vấn đề trợ năng)</p>
+
+<h3>4.5 Khả Năng Bảo Trì</h3>
+
+<p><strong>Cấu trúc mã:</strong> Tổ chức tốt thành 5 dự án với ranh giới rõ ràng. Đặt tên tệp nhất quán (<code>*Service.cs</code>, <code>*Repository.cs</code>).</p>
+
+<p><strong>Tuân thủ DRY:</strong> Hầu hết tốt. Nhưng:</p>
+<ol>
+  <li><strong>FileLogger trùng lặp:</strong> <code>BLL/FileLogger.cs</code> tồn tại cùng với <code>Utilities/FileLogger.cs</code>. Bản sao BLL có ghi chú "Copy vào BLL để không cần reference" — đây là sao chép có chủ đích.</li>
+  <li><strong>Cấu hình cột lặp lại:</strong> <code>ConfigureGridColumns()</code> trong BookControl và OrdersControl theo mẫu tương tự nhưng không được trích xuất.</li>
+</ol>
+
+<p><strong>Đánh giá God Form:</strong> Không form nào vượt quá 300 dòng. <code>PosForm</code> 228 dòng là form lớn nhất — chấp nhận được. Logic được ủy thác đúng cách cho service.</p>
+
+<p><strong>Điểm:</strong> <span class="green">7.5/10</span> (cấu trúc sạch, event handler mỏng, hằng số tập trung; trùng lặp nhỏ, khớp nối Service Locator)</p>
+
+<h3>4.6 Kiểm Tra Hợp Lệ & Xử Lý Lỗi</h3>
+
+<p><strong>Mẫu kiểm tra hợp lệ:</strong> Sử dụng nhất quán DTO <code>ValidationResult</code> với thuộc tính <code>IsValid</code>/<code>ErrorMessage</code>. Các service trả về <code>ValidationResult</code> từ mọi thao tác thay đổi.</p>
+
+<p><strong>Thiếu kiểm tra hợp lệ:</strong></p>
+<ul>
+  <li><strong>Không kiểm tra trùng ISBN</strong> trong <code>BookService.AddBook()</code> — sẽ ném <code>SqlException</code> thô khi vi phạm ràng buộc UNIQUE</li>
+  <li><strong>Không kiểm tra trùng tên đăng nhập</strong> khi tạo tài khoản</li>
+  <li><strong>Không kiểm tra tính hợp lý của tổng đơn hàng</strong> (vd: tổng âm sau giảm giá quá mức)</li>
+</ul>
+
+<p><strong>Xử lý lỗi:</strong></p>
+<ul>
+  <li><code>Program.cs</code> có <strong>khối catch rỗng</strong> — ngoại lệ đọc <code>appsettings.json</code> bị nuốt âm thầm</li>
+  <li><code>OrderRepository.CreateOrder()</code> sử dụng <strong>transaction với rollback</strong> — <strong class="green">XUẤT SẮC</strong></li>
+  <li>Không có trình xử lý ngoại lệ toàn cục cho lỗi luồng UI không được xử lý</li>
+</ul>
+
+<p><strong>Điểm:</strong> <span class="yellow">6.5/10</span></p>
+
+<h3>4.7 Quản Lý Dữ Liệu</h3>
+
+<div class="bug-box">
+  <h4 style="margin-top:0;">🐛 LỖI NGHIÊM TRỌNG — Trừ Kho Không Bao Giờ Được Lưu</h4>
+  <p>
+    Trong <a href="#"><code>BLL/PosService.cs:184-197</code></a>, sau khi <code>CompleteCheckout()</code> gọi <code>_orderService.CreateOrder()</code>:
+  </p>
+  <pre><code>// Trừ kho — chuyển từ OrderRepository sang tầng điều phối service
+foreach (var detail in checkout.Details)
+{
+    var book = _bookRepository.GetById(detail.BookID);
+    if (book is not null)
+    {
+        var oldStock = book.QuantityInStock;
+        book.QuantityInStock = Math.Max(0, book.QuantityInStock - detail.Quantity);
+        book.LastSoldDate = DateTime.Now;
+        FileLogger.Info(
+            $"Stock: Book #{book.BookID} \"{book.Title}\" {oldStock}→{book.QuantityInStock}");
+    }
+}</code></pre>
+  <p>
+    Số lượng tồn kho chỉ được sửa đổi <strong>trên đối tượng Book trong bộ nhớ</strong> được trả về bởi <code>GetById()</code>. <strong>Không có lời gọi đến <code>_bookRepository.UpdateStock()</code> hoặc <code>_bookRepository.Update()</code>.</strong> Việc trừ kho không bao giờ được ghi vào cơ sở dữ liệu. Ghi chú nói "chuyển từ OrderRepository sang tầng điều phối service" nhưng lời gọi repository dường như đã bị xóa mà không thêm thay thế. <strong>Điều này có nghĩa là sau mỗi lần bán, cơ sở dữ liệu vẫn hiển thị số lượng tồn kho ban đầu.</strong>
+  </p>
+  <p>
+    Phương thức <code>BookRepository.UpdateStock()</code> tồn tại tại <a href="#"><code>DAL/Repositories/BookRepository.cs:77</code></a> và được triển khai đầy đủ — nó chỉ không bao giờ được gọi từ luồng thanh toán.
+  </p>
+</div>
+
+<p><strong>Xử lý kết nối:</strong> Mỗi phương thức repository tạo kết nối riêng qua <code>using</code> — các kết nối được giải phóng đúng cách. Tuy nhiên, không có cấu hình connection pooling.</p>
+
+<p><strong>Triển khai tìm kiếm:</strong> Tất cả phương thức tìm kiếm đều tải toàn bộ bảng vào bộ nhớ và lọc bằng LINQ. Sẽ không mở rộng được khi vượt quá vài nghìn bản ghi.</p>
+
+<p><strong>Điểm:</strong> <span class="red">4/10</span> (lỗi trừ kho nghiêm trọng; soft-delete không nhất quán; vấn đề khả năng mở rộng tìm kiếm)</p>
+
+<h3>4.8 Sẵn Sàng Triển Khai</h3>
+
+<p><strong>Build:</strong> <code>dotnet build BookStoreApp.sln</code> biên dịch được giải pháp. README cung cấp hướng dẫn build và chạy rõ ràng.</p>
+
+<p><strong>Thiếu cho triển khai:</strong></p>
+<ul>
+  <li>Không có dự án cài đặt/publisher (không MSI, ClickOnce, hoặc publish profile)</li>
+  <li>Không có chiến lược di chuyển cơ sở dữ liệu</li>
+  <li>Không có chức năng sao lưu/phục hồi</li>
+  <li>Không có số phiên bản ứng dụng nhúng trong binary hoặc hiển thị trong UI</li>
+  <li>Không có kiểm tra kết nối khi khởi động</li>
+</ul>
+
+<p><strong>Điểm:</strong> <span class="yellow">5/10</span></p>
+
+<h3>4.9 Mức Độ Hoàn Thiện Demo</h3>
+
+<p><strong>Tính năng đã triển khai và hoạt động:</strong></p>
+<ul>
+  <li>✅ Đăng nhập với phân quyền (Admin/Staff)</li>
+  <li>✅ Dashboard với 8 KPI, đơn hàng gần đây, sách bán chạy</li>
+  <li>✅ CRUD Sách với soft delete, lọc đa tiêu chí</li>
+  <li>✅ CRUD Danh mục / Nhà cung cấp</li>
+  <li>✅ CRUD Khách hàng với lịch sử mua hàng</li>
+  <li>✅ CRUD Nhân viên (chỉ Admin)</li>
+  <li>✅ POS đầy đủ: giỏ hàng, giảm giá, thuế, điểm tích lũy</li>
+  <li>✅ Quản lý đơn hàng: danh sách, lọc, chi tiết, cập nhật trạng thái</li>
+  <li>✅ 7 loại báo cáo với biểu đồ OxyPlot</li>
+  <li>✅ Xuất CSV, HTML-dạng-Excel, text-dạng-PDF</li>
+  <li>✅ Trình cung cấp thanh toán MoMo (HMAC-SHA256 đầy đủ)</li>
+  <li>✅ Trình cung cấp thanh toán VNPay (HMAC-SHA512 đầy đủ)</li>
+  <li>✅ Trình cung cấp Demo với QR bitmap tự tạo</li>
+  <li>✅ Form QR code với đếm ngược và polling</li>
+  <li>✅ Factory trình cung cấp thanh toán với fallback tự động</li>
+  <li>✅ Ghi log tệp (log hàng ngày)</li>
+  <li>✅ Hệ thống theme nhất quán</li>
+</ul>
+
+<p><strong>Triển khai một phần:</strong></p>
+<ul>
+  <li>⚠️ Trừ kho (tính đúng nhưng không bao giờ lưu)</li>
+  <li>⚠️ Xuất PDF (tệp văn bản với ký tự box-drawing, không phải PDF thực)</li>
+  <li>⚠️ Xuất Excel (tệp HTML lưu với đuôi .xls, không phải định dạng Excel thực)</li>
+</ul>
+
+<p><strong>Chưa triển khai (nhưng được tuyên bố hoặc ngụ ý):</strong></p>
+<ul>
+  <li>❌ Băm mật khẩu (chỉ plaintext)</li>
+  <li>❌ Quy trình nhập kho (được đề cập trong báo cáo nhưng không có mã)</li>
+  <li>❌ Chức năng sao lưu/phục hồi</li>
+  <li>❌ Giao diện tạo tài khoản</li>
+  <li>❌ Chức năng in hóa đơn</li>
+</ul>
+
+<!-- ====== ĐÁNH GIÁ BÁO CÁO ====== -->
+<h2 id="danh-gia-bao-cao">5. Đánh Giá Báo Cáo</h2>
+
+<h3>5.1 Cấu Trúc</h3>
+<p>Báo cáo (<code>Desktop.pdf</code>) theo cấu trúc học thuật chuẩn: Chương I (Khảo sát & Yêu cầu), Chương II (Phân tích Hệ thống), Chương III (Thiết kế Hệ thống), Chương IV (Thiết kế Giao diện). Tài liệu bổ trợ <code>docs/functional-description.md</code> cung cấp chi tiết thêm.</p>
+<p><strong>Điểm:</strong> <span class="green">7/10</span></p>
+
+<h3>5.2 Yêu Cầu</h3>
+<p>Yêu cầu chức năng được nêu rõ ràng. Yêu cầu phi chức năng được liệt kê nhưng một số mang tính nguyện vọng hơn là đã được xác minh (vd: "hoạt động trên nhiều thiết bị và hệ điều hành" — ứng dụng chỉ chạy trên Windows).</p>
+<p><strong>Điểm:</strong> <span class="yellow">6/10</span></p>
+
+<h3>5.3 Thiết Kế Hệ Thống</h3>
+<p>Mô tả kiến trúc chính xác trong hầu hết các khía cạnh. Tuy nhiên, tuyên bố <strong>10 bảng</strong> trong khi lược đồ thực tế có <strong>8 bảng</strong>. Hai bảng "thiếu" là <code>ImportReceipt</code> và <code>ImportDetail</code> — được mô tả trong phần phân tích dữ liệu nhưng chưa từng được triển khai.</p>
+<p><strong>Điểm:</strong> <span class="yellow">5.5/10</span></p>
+
+<h3>5.4 Giải Thích Cơ Sở Dữ Liệu</h3>
+<p>Báo cáo mô tả quá trình chuẩn hóa từ bản ghi Excel thủ công sang bảng quan hệ. Tuy nhiên:</p>
+<ul>
+  <li>Tuyên bố "mã hóa mật khẩu" nhưng mã nguồn sử dụng so sánh plaintext</li>
+  <li>Tuyên bố tên cột <code>PasswordHash</code> nhưng cột thực tế là <code>Password</code></li>
+</ul>
+<p><strong>Điểm:</strong> <span class="red">4/10</span></p>
+
+<h3>5.5 Ảnh Chụp Màn Hình</h3>
+<p>PDF tham chiếu 14 hình (Hình 4.1 đến Hình 4.8.2) nhưng <strong>không có hình ảnh thực tế nào được nhúng</strong>. PDF dường như là bản xuất chỉ có văn bản đã mất tất cả hình ảnh nhúng.</p>
+<p><strong>Điểm:</strong> <span class="red">1/10</span></p>
+
+<h3>5.6 Kiểm Thử</h3>
+<p>Báo cáo đề cập đến "kiểm thử hộp trắng và hộp đen" nhưng:</p>
+<ul>
+  <li>Không có ca kiểm thử nào được ghi lại</li>
+  <li>Không có dự án kiểm thử đơn vị trong giải pháp</li>
+  <li>Không có dữ liệu kiểm thử hoặc tập lệnh kiểm thử</li>
+</ul>
+<p><strong>Điểm:</strong> <span class="red">1/10</span></p>
+
+<h3>5.7 Tài Liệu Tham Khảo</h3>
+<p>Không có phần tài liệu tham khảo trong <code>Desktop.pdf</code>.</p>
+<p><strong>Điểm:</strong> <span class="red">0/10</span></p>
+
+<h3>5.8 Chất Lượng Tài Liệu</h3>
+<p><strong>Điểm mạnh:</strong> README xuất sắc; <code>database.sql</code> được ghi chú tốt; mã nguồn có ghi chú tiếng Việt.</p>
+<p><strong>Điểm yếu:</strong> PDF không có hình ảnh nhúng; chứa lỗi thực tế; không có tài liệu tham khảo; không có tài liệu kiểm thử.</p>
+<p><strong>Điểm:</strong> <span class="yellow">4.5/10</span></p>
+
+<!-- ====== ĐỐI CHIẾU BÁO CÁO ↔ MÃ NGUỒN ====== -->
+<h2 id="doi-chieu">6. Đối Chiếu Báo Cáo ↔ Mã Nguồn</h2>
+
+<table>
+<thead>
+<tr><th>#</th><th>Tuyên Bố Trong Báo Cáo</th><th>Bằng Chứng Mã Nguồn</th><th>Khớp?</th><th>Mức Độ</th><th>Sửa</th></tr>
+</thead>
+<tbody>
+
+<tr>
+  <td>1</td>
+  <td>"10 bảng được thiết kế logic"</td>
+  <td><code>database.sql</code> có 8 bảng</td>
+  <td><span class="match-no">❌ KHÔNG</span></td>
+  <td><span class="badge badge-high">Cao</span></td>
+  <td>Thêm bảng ImportReceipt/ImportDetail hoặc sửa báo cáo thành 8</td>
+</tr>
+
+<tr>
+  <td>2</td>
+  <td>Cột "PasswordHash"</td>
+  <td><code>Accounts.Password</code> là tên cột thực tế</td>
+  <td><span class="match-no">❌ KHÔNG</span></td>
+  <td><span class="badge badge-medium">Trung Bình</span></td>
+  <td>Đổi tên cột hoặc cập nhật báo cáo; triển khai băm thực sự</td>
+</tr>
+
+<tr>
+  <td>3</td>
+  <td>"mã hóa mật khẩu"</td>
+  <td><code>AuthService.Login()</code> dùng <code>string.Equals(account.Password, password)</code></td>
+  <td><span class="match-no">❌ KHÔNG</span></td>
+  <td><span class="badge badge-critical">Nghiêm Trọng</span></td>
+  <td>Triển khai BCrypt hoặc SHA256</td>
+</tr>
+
+<tr>
+  <td>4</td>
+  <td>Bảng "ImportReceipt & ImportDetail"</td>
+  <td>Không có trong <code>database.sql</code> hoặc bất kỳ repository nào</td>
+  <td><span class="match-no">❌ KHÔNG</span></td>
+  <td><span class="badge badge-high">Cao</span></td>
+  <td>Xóa khỏi báo cáo hoặc triển khai</td>
+</tr>
+
+<tr>
+  <td>5</td>
+  <td>"Xuất báo cáo ra file Excel hoặc PDF"</td>
+  <td>CSV: ✅; Excel: HTML với đuôi .xls; PDF: tệp văn bản với ký tự box</td>
+  <td><span class="match-partial">⚠️ MỘT PHẦN</span></td>
+  <td><span class="badge badge-medium">Trung Bình</span></td>
+  <td>Dùng ClosedXML cho Excel thực, PdfSharp cho PDF thực</td>
+</tr>
+
+<tr>
+  <td>6</td>
+  <td>"Transaction được rollback" khi lỗi DB</td>
+  <td><code>OrderRepository.CreateOrder()</code> có try/catch với <code>tran.Rollback()</code></td>
+  <td><span class="match-yes">✅ KHỚP</span></td>
+  <td>—</td>
+  <td>—</td>
+</tr>
+
+<tr>
+  <td>7</td>
+  <td>"Tự động kiểm tra tồn kho và cập nhật số lượng sách"</td>
+  <td>Kiểm tra tồn kho có thực hiện nhưng <strong>không bao giờ lưu</strong> sau bán</td>
+  <td><span class="match-no">❌ KHÔNG</span></td>
+  <td><span class="badge badge-critical">Nghiêm Trọng</span></td>
+  <td>Thêm <code>_bookRepository.UpdateStock()</code> trong <code>PosService.CompleteCheckout()</code></td>
+</tr>
+
+<tr>
+  <td>8</td>
+  <td>"Phân quyền tài khoản"</td>
+  <td><code>MainForm</code> ẩn nút thanh bên cho Staff; <code>BookControl</code> nhận <code>readOnly</code></td>
+  <td><span class="match-yes">✅ KHỚP</span></td>
+  <td>—</td>
+  <td>—</td>
+</tr>
+
+<tr>
+  <td>9</td>
+  <td>"Tích hợp qr code ... như momo"</td>
+  <td><code>MomoPaymentProvider</code>, <code>VNPayPaymentProvider</code>, <code>DemoPaymentProvider</code> đều triển khai <code>IPaymentProvider</code></td>
+  <td><span class="match-yes">✅ KHỚP</span></td>
+  <td>—</td>
+  <td>—</td>
+</tr>
+
+<tr>
+  <td>10</td>
+  <td>"Hỗ trợ tìm kiếm sách nhanh"</td>
+  <td><code>BookService.SearchBooks()</code> tải tất cả sách và lọc trong bộ nhớ</td>
+  <td><span class="match-partial">⚠️ MỘT PHẦN</span></td>
+  <td><span class="badge badge-low">Thấp</span></td>
+  <td>Thêm tìm kiếm phía máy chủ với SQL LIKE</td>
+</tr>
+
+<tr>
+  <td>11</td>
+  <td>"Sao lưu và phục hồi dữ liệu"</td>
+  <td>Không tìm thấy triển khai</td>
+  <td><span class="match-no">❌ KHÔNG</span></td>
+  <td><span class="badge badge-medium">Trung Bình</span></td>
+  <td>Xóa khỏi yêu cầu phi chức năng hoặc triển khai</td>
+</tr>
+
+<tr>
+  <td>12</td>
+  <td>"Hệ thống có thể hoạt động trên nhiều thiết bị và hệ điều hành"</td>
+  <td>.NET 9 Windows Forms chỉ chạy trên Windows</td>
+  <td><span class="match-no">❌ KHÔNG</span></td>
+  <td><span class="badge badge-medium">Trung Bình</span></td>
+  <td>Sửa thành "Chỉ Windows"</td>
+</tr>
+
+<tr>
+  <td>13</td>
+  <td>Sơ đồ Use Case</td>
+  <td><code>docs/functional-description.md</code> chứa flowchart Mermaid</td>
+  <td><span class="match-yes">✅ KHỚP</span></td>
+  <td>—</td>
+  <td>—</td>
+</tr>
+
+<tr>
+  <td>14</td>
+  <td>Sơ đồ lớp</td>
+  <td><code>docs/class-diagram.png</code> và <code>docs/class-diagram.mmd</code> tồn tại</td>
+  <td><span class="match-yes">✅ KHỚP</span></td>
+  <td>—</td>
+  <td>—</td>
+</tr>
+
+<tr>
+  <td>15</td>
+  <td>Dữ liệu mẫu: "20 sách, 3 khách hàng, 3 nhân viên, 2 tài khoản"</td>
+  <td>Xác nhận trong <code>database.sql</code></td>
+  <td><span class="match-yes">✅ KHỚP</span></td>
+  <td>—</td>
+  <td>—</td>
+</tr>
+
+</tbody>
+</table>
+
+<p><strong>Tổng kết:</strong> 6 khớp, 2 khớp một phần, 7 không khớp. Các điểm không khớp tập trung ở tuyên bố bảo mật (băm mật khẩu), toàn vẹn dữ liệu (trừ kho), và phóng đại báo cáo (số bảng, quy trình nhập kho, xuất PDF, đa nền tảng).</p>
+
+<!-- ====== LỖI NGHIÊM TRỌNG ====== -->
+<h2 id="loi-nghiem-trong">7. Các Lỗi Nghiêm Trọng</h2>
+
+<table>
+<thead>
+<tr><th>#</th><th>Vị Trí</th><th>Vấn Đề</th><th>Bằng Chứng</th><th>Tác Động</th><th>Điểm Ảnh Hưởng</th><th>Sửa</th></tr>
+</thead>
+<tbody>
+
+<tr>
+  <td>1</td>
+  <td><a href="#"><code>BLL/PosService.cs:184-197</code></a></td>
+  <td><strong>Trừ kho không bao giờ được lưu vào DB</strong></td>
+  <td>Chỉ trong bộ nhớ: <code>book.QuantityInStock = ...</code> không gọi <code>_bookRepository.UpdateStock()</code></td>
+  <td><strong>Nghiêm trọng</strong> — Chức năng tồn kho cốt lõi bị hỏng</td>
+  <td>Chương Trình −1.0</td>
+  <td>Thêm <code>_bookRepository.UpdateStock(book.BookID, book.QuantityInStock, book.LastSoldDate)</code> sau dòng 196</td>
+</tr>
+
+<tr>
+  <td>2</td>
+  <td><a href="#"><code>BLL/AuthService.cs:29</code></a></td>
+  <td><strong>Mật khẩu lưu và so sánh dạng plaintext</strong></td>
+  <td><code>string.Equals(account.Password, password, StringComparison.Ordinal)</code></td>
+  <td><strong>Nghiêm trọng</strong> — Vi phạm bảo mật</td>
+  <td>Chương Trình −0.5, Báo Cáo −0.5</td>
+  <td>Triển khai BCrypt.Net hoặc SHA256 + salt</td>
+</tr>
+
+<tr>
+  <td>3</td>
+  <td><a href="#"><code>Desktop.pdf:388</code></a></td>
+  <td><strong>Báo cáo tuyên bố 10 bảng, chỉ có 8</strong></td>
+  <td><code>database.sql</code> có 8 câu lệnh CREATE TABLE</td>
+  <td><strong>Cao</strong> — Sai sự thật trong báo cáo học thuật</td>
+  <td>Báo Cáo −0.75</td>
+  <td>Sửa báo cáo hoặc triển khai các bảng thiếu</td>
+</tr>
+
+<tr>
+  <td>4</td>
+  <td><a href="#"><code>Desktop.pdf:560</code></a></td>
+  <td><strong>Báo cáo tuyên bố mã hóa mật khẩu</strong></td>
+  <td>Không có băm trong mã; cột là <code>Password</code> không phải <code>PasswordHash</code></td>
+  <td><strong>Cao</strong> — Tuyên bố sai trong báo cáo</td>
+  <td>Báo Cáo −0.5</td>
+  <td>Triển khai băm hoặc xóa tuyên bố</td>
+</tr>
+
+<tr>
+  <td>5</td>
+  <td><a href="#"><code>BookStoreApp/ServiceLocator.cs</code></a></td>
+  <td><strong>Anti-pattern Service Locator thay vì DI</strong></td>
+  <td>Tất cả service là singleton tĩnh được truy cập qua thuộc tính tĩnh</td>
+  <td><strong>Trung Bình</strong> — Khả năng kiểm thử và khớp nối</td>
+  <td>Chương Trình −0.25</td>
+  <td>Sử dụng <code>Microsoft.Extensions.DependencyInjection</code></td>
+</tr>
+
+<tr>
+  <td>6</td>
+  <td><a href="#"><code>Desktop.pdf</code></a></td>
+  <td><strong>Không có ảnh chụp màn hình trong PDF</strong></td>
+  <td>14 tham chiếu hình không có hình ảnh nhúng</td>
+  <td><strong>Cao</strong> — Thất bại tài liệu</td>
+  <td>Báo Cáo −1.0</td>
+  <td>Xuất lại PDF với hình ảnh nhúng</td>
+</tr>
+
+</tbody>
+</table>
+
+<!-- ====== LỖI NHỎ ====== -->
+<h2 id="loi-nho">8. Các Lỗi Nhỏ</h2>
+
+<table>
+<thead>
+<tr><th>#</th><th>Vị Trí</th><th>Vấn Đề</th><th>Tác Động</th><th>Sửa</th></tr>
+</thead>
+<tbody>
+
+<tr><td>1</td><td><a href="#"><code>BLL/BookService.cs:80-87</code></a></td><td>Không kiểm tra trùng ISBN trước khi chèn</td><td>SQL exception thay vì thông báo sạch</td><td>Thêm kiểm tra trong bộ nhớ trước Add</td></tr>
+
+<tr><td>2</td><td><a href="#"><code>DAL/Repositories/CustomerRepository.cs:64-71</code></a></td><td>DELETE cứng trên Customers</td><td>Làm hỏng tham chiếu Orders.CustomerID</td><td>Sử dụng soft delete như BookRepository</td></tr>
+
+<tr><td>3</td><td><a href="#"><code>DAL/Repositories/EmployeeRepository.cs:53-59</code></a></td><td>DELETE cứng trên Employees</td><td>Làm hỏng tham chiếu Orders.EmployeeID và Accounts.EmployeeID</td><td>Sử dụng soft delete</td></tr>
+
+<tr><td>4</td><td><a href="#"><code>BookStoreApp/Program.cs:42-45</code></a></td><td>Khối catch rỗng nuốt lỗi cấu hình</td><td>Lỗi âm thầm; khó chẩn đoán</td><td>Ghi log ngoại lệ</td></tr>
+
+<tr><td>5</td><td><a href="#"><code>BookStoreApp/Program.cs:66-69</code></a></td><td>Khối catch rỗng cho cấu hình thanh toán</td><td>Lỗi âm thầm</td><td>Ghi log ngoại lệ</td></tr>
+
+<tr><td>6</td><td><a href="#"><code>BookStoreApp/Forms/MainForm.cs:44-49</code></a></td><td>UserControl mới được tạo mỗi lần điều hướng</td><td>Mất trạng thái, áp lực bộ nhớ, truy vấn DB dư thừa</td><td>Cache UserControl trong Dictionary</td></tr>
+
+<tr><td>7</td><td><a href="#"><code>BLL/FileLogger.cs</code></a> + <a href="#"><code>Utilities/FileLogger.cs</code></a></td><td>Lớp FileLogger trùng lặp trong hai dự án</td><td>Gánh nặng bảo trì</td><td>Hợp nhất vào Utilities và tham chiếu từ BLL</td></tr>
+
+<tr><td>8</td><td><a href="#"><code>BookStoreApp/Forms/LoginForm.cs:36</code></a></td><td>Không giới hạn số lần đăng nhập</td><td>Lỗ hổng brute-force</td><td>Thêm bộ đếm với khóa tạm thời</td></tr>
+
+<tr><td>9</td><td><a href="#"><code>BookStoreApp/Forms/MainForm.cs:89-95</code></a></td><td>Không có hộp thoại xác nhận đăng xuất</td><td>Rủi ro đăng xuất ngẫu nhiên</td><td>Thêm <code>MessageBox.Show("Bạn có chắc?", ...)</code></td></tr>
+
+<tr><td>10</td><td><a href="#"><code>database.sql</code></a></td><td>Không có chỉ mục ngoài khóa chính</td><td>Hiệu suất truy vấn ở quy mô lớn</td><td>Thêm chỉ mục trên <code>Orders.OrderDate</code>, <code>Books.Title</code></td></tr>
+
+<tr><td>11</td><td><a href="#"><code>Utilities/ReportExporter.cs:59-104</code></a></td><td>"PDF" ghi tệp .txt với ký tự box-drawing</td><td>Đuôi tệp gây hiểu nhầm</td><td>Dùng thư viện PDF thực hoặc đổi tên thành "Báo Cáo Văn Bản"</td></tr>
+
+<tr><td>12</td><td><a href="#"><code>BLL/BookService.cs:19-31</code></a></td><td>Tìm kiếm tải toàn bộ bảng vào bộ nhớ</td><td>Hiệu suất ở quy mô lớn</td><td>Thêm mệnh đề WHERE với LIKE trong SQL</td></tr>
+
+<tr><td>13</td><td><a href="#"><code>BookStoreApp/Forms/PaymentQRForm.cs:187-195</code></a></td><td>Tự động đóng 800ms sau khi xác nhận thanh toán</td><td>Người dùng không kịp đọc thông báo thành công</td><td>Thêm nút "Đóng" và để người dùng tự đóng</td></tr>
+
+</tbody>
+</table>
+
+<!-- ====== DỌN DẸP ====== -->
+<h2 id="don-dep">9. Đánh Giá Dọn Dẹp Mã Nguồn</h2>
+
+<table>
+<thead>
+<tr><th>Hành Động</th><th>Tệp</th><th>Lý Do</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Giữ</strong></td><td>Tất cả <code>BLL/*Service.cs</code>, <code>DAL/Repositories/*Repository.cs</code>, <code>DTO/**/*.cs</code>, <code>BookStoreApp/Forms/*.cs</code>, <code>BookStoreApp/UserControls/*.cs</code>, <code>BookStoreApp/Theme/*.cs</code></td><td>Mã ứng dụng cốt lõi</td></tr>
+<tr><td><strong>Lưu Trữ</strong></td><td><code>Utilities/FileLogger.cs</code></td><td>Trùng lặp với <code>BLL/FileLogger.cs</code> — hợp nhất thành một</td></tr>
+<tr><td><strong>Tái Cấu Trúc</strong></td><td><code>BookStoreApp/ServiceLocator.cs</code></td><td>Thay thế Service Locator bằng container DI chính thống</td></tr>
+<tr><td><strong>Tái Cấu Trúc</strong></td><td><code>BLL/PosService.cs:184-197</code></td><td>Thêm lời gọi lưu trừ kho</td></tr>
+<tr><td><strong>Tái Cấu Trúc</strong></td><td><code>BLL/AuthService.cs</code></td><td>Thêm băm mật khẩu</td></tr>
+<tr><td><strong>Tái Cấu Trúc</strong></td><td><code>BookStoreApp/Forms/MainForm.cs</code></td><td>Cache UserControl để tránh mất trạng thái</td></tr>
+<tr><td><strong>Tránh Đụng</strong></td><td><code>BLL/Payments/*.cs</code></td><td>Trình cung cấp thanh toán được triển khai tốt và theo đặc tả ngoài</td></tr>
+<tr><td><strong>Tránh Đụng</strong></td><td><code>DAL/DbConnectionFactory.cs</code></td><td>Đơn giản, chính xác, trách nhiệm đơn</td></tr>
+</tbody>
+</table>
+
+<!-- ====== PHẢI SỬA ====== -->
+<h2 id="phai-sua">10. Danh Sách Phải Sửa</h2>
+
+<table>
+<thead>
+<tr><th>#</th><th>Vấn Đề</th><th>Rủi Ro</th><th>Sửa Chính Xác</th><th>Khôi Phục Điểm Dự Kiến</th></tr>
+</thead>
+<tbody>
+
+<tr>
+  <td>1</td>
+  <td>Trừ kho không bao giờ được lưu sau bán</td>
+  <td>Ứng dụng không hoạt động cho quản lý tồn kho</td>
+  <td>Trong <code>PosService.CompleteCheckout()</code>, sau dòng 196, thêm:<br><code>_bookRepository.UpdateStock(book.BookID, book.QuantityInStock, book.LastSoldDate);</code></td>
+  <td>+0.75 Chương Trình</td>
+</tr>
+
+<tr>
+  <td>2</td>
+  <td>Mật khẩu plaintext</td>
+  <td>Lỗ hổng bảo mật; sai sự thật trong báo cáo</td>
+  <td>Thêm gói NuGet <code>BCrypt.Net-Next</code>; băm mật khẩu với <code>BCrypt.HashPassword()</code>; cập nhật <code>AuthService.Login()</code> dùng <code>BCrypt.Verify()</code></td>
+  <td>+0.4 Chương Trình, +0.5 Báo Cáo</td>
+</tr>
+
+<tr>
+  <td>3</td>
+  <td>Báo cáo tuyên bố 10 bảng, có 8</td>
+  <td>Vấn đề liêm chính học thuật</td>
+  <td>Sửa <code>Desktop.pdf</code> dòng 388 thành "8 bảng"</td>
+  <td>+0.5 Báo Cáo</td>
+</tr>
+
+<tr>
+  <td>4</td>
+  <td>Không có ảnh chụp màn hình trong báo cáo</td>
+  <td>Thất bại tài liệu</td>
+  <td>Xuất lại PDF từ Word/LaTeX với hình ảnh nhúng</td>
+  <td>+0.75 Báo Cáo</td>
+</tr>
+
+<tr>
+  <td>5</td>
+  <td>Xuất PDF giả</td>
+  <td>Chức năng gây hiểu nhầm</td>
+  <td>Dùng <code>PdfSharp</code>/<code>iTextSharp</code> cho PDF thực hoặc đổi tên tùy chọn xuất thành "Báo Cáo Văn Bản"</td>
+  <td>+0.25 Chương Trình</td>
+</tr>
+
+</tbody>
+</table>
+
+<!-- ====== NÊN SỬA ====== -->
+<h2 id="nen-sua">11. Danh Sách Nên Sửa</h2>
+
+<table>
+<thead>
+<tr><th>#</th><th>Vấn Đề</th><th>Sửa</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>DELETE cứng trên Customer/Employee</td><td>Thêm cột <code>IsDeleted</code>, cập nhật repository thành soft-delete</td></tr>
+<tr><td>2</td><td>Mẫu Service Locator</td><td>Di chuyển sang <code>Microsoft.Extensions.DependencyInjection</code> với constructor injection</td></tr>
+<tr><td>3</td><td>FileLogger trùng lặp</td><td>Xóa <code>BLL/FileLogger.cs</code>, tham chiếu <code>Utilities/FileLogger.cs</code> từ BLL</td></tr>
+<tr><td>4</td><td>Khối catch rỗng</td><td>Ghi log ngoại lệ vào FileLogger thay vì nuốt</td></tr>
+<tr><td>5</td><td>Khả năng mở rộng tìm kiếm</td><td>Thêm mệnh đề WHERE tùy chọn vào truy vấn SQL</td></tr>
+<tr><td>6</td><td>Không có chỉ mục</td><td>Thêm câu lệnh <code>CREATE INDEX</code> vào <code>database.sql</code></td></tr>
+<tr><td>7</td><td>UserControl mới mỗi lần điều hướng</td><td>Cache instance trong <code>Dictionary<string, UserControl></code> trong MainForm</td></tr>
+<tr><td>8</td><td>Không xác nhận đăng xuất</td><td>Thêm hộp thoại xác nhận</td></tr>
+<tr><td>9</td><td>Không kiểm tra trùng ISBN</td><td>Thêm kiểm tra trong <code>BookService.AddBook()</code> trước khi chèn</td></tr>
+</tbody>
+</table>
+
+<!-- ====== TỐI ƯU TÙY CHỌN ====== -->
+<h2 id="toi-uu">12. Tối Ưu Tùy Chọn</h2>
+
+<table>
+<thead>
+<tr><th>#</th><th>Đề Xuất</th><th>Lợi Ích</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>Thêm dự án kiểm thử đơn vị (xUnit/NUnit)</td><td>Khả năng kiểm thử, tính học thuật</td></tr>
+<tr><td>2</td><td>Thêm spinner tải khi đang fetch dữ liệu</td><td>Cải thiện UX</td></tr>
+<tr><td>3</td><td>Thêm phím tắt (Ctrl+N sách mới, Ctrl+S lưu...)</td><td>Hiệu quả cho người dùng thành thạo</td></tr>
+<tr><td>4</td><td>Thêm xuất dữ liệu từ lưới dữ liệu (chuột phải → Xuất CSV)</td><td>Tiện lợi cho người dùng</td></tr>
+<tr><td>5</td><td>Thêm số phiên bản ứng dụng vào tiêu đề cửa sổ</td><td>Hỗ trợ/gỡ lỗi</td></tr>
+<tr><td>6</td><td>Thêm bảng và quy trình <code>ImportReceipt</code>/<code>ImportDetail</code></td><td>Tính hoàn chỉnh (khớp với tuyên bố báo cáo)</td></tr>
+<tr><td>7</td><td>Thêm xuất Excel thực qua ClosedXML</td><td>Đầu ra chuyên nghiệp</td></tr>
+<tr><td>8</td><td>Thêm chức năng in hóa đơn</td><td>Yêu cầu POS thực tế</td></tr>
+<tr><td>9</td><td>Tạo trình cài đặt WiX hoặc ClickOnce publish profile</td><td>Hoàn thiện triển khai</td></tr>
+</tbody>
+</table>
+
+<!-- ====== MỤC TIÊU CUỐI CÙNG ====== -->
+<h2 id="muc-tieu">13. Mục Tiêu Cuối Cùng Đề Xuất</h2>
+
+<table>
+<thead>
+<tr><th>Thành Phần</th><th>Hiện Tại (Bình Thường)</th><th>Mục Tiêu (với sửa chữa)</th><th>Cách Đạt Được</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td>Chương Trình</td>
+  <td>3.0 / 4</td>
+  <td><strong>3.5 / 4</strong></td>
+  <td>Sửa lỗi trừ kho, thêm băm mật khẩu, thay PDF giả bằng PDF thực hoặc đổi tên</td>
+</tr>
+<tr>
+  <td>Báo Cáo</td>
+  <td>2.5 / 4</td>
+  <td><strong>3.25 / 4</strong></td>
+  <td>Nhúng ảnh chụp màn hình, sửa số bảng, xóa tham chiếu ImportReceipt hoặc thêm bảng, xóa tuyên bố băm mật khẩu sai</td>
+</tr>
+<tr>
+  <td><strong>Tổng</strong></td>
+  <td><strong>5.5 / 8</strong></td>
+  <td><strong>6.75 / 8</strong></td>
+  <td></td>
+</tr>
+</tbody>
+</table>
+
+<p>Khả năng khôi phục 1.25 điểm có thể đạt được với khoảng 4–6 giờ làm việc tập trung vào danh sách phải sửa.</p>
+
+<!-- ====== PHÁN QUYẾT CUỐI CÙNG ====== -->
+<h2 id="ket-luan">14. Phán Quyết Cuối Cùng Của Giám Khảo</h2>
+
+<h3>Đậu dưới chế độ chấm nghiêm khắc? <span class="badge badge-fail">❌ KHÔNG</span></h3>
+<p>Lỗi trừ kho không lưu có nghĩa là chức năng tồn kho cốt lõi không hoạt động. Mật khẩu plaintext không thể chấp nhận cho bất kỳ hệ thống nào xử lý dữ liệu tài chính. Báo cáo chứa sai sự thật có thể xác minh. <strong>3.5/8 — Trượt.</strong></p>
+
+<h3>Đậu dưới chế độ chấm bình thường? <span class="badge badge-pass">✅ ĐẬU RANH GIỚI</span></h3>
+<p>Dự án thể hiện kỹ năng kỹ thuật thực sự trên phạm vi tính năng rộng. Kiến trúc về cơ bản là vững chắc, và hầu hết tính năng hoạt động chính xác. Lỗi nghiêm trọng và điểm không chính xác trong báo cáo kéo điểm xuống, nhưng chất lượng tổng thể đủ cho đồ án nhóm đại học. <strong>5.5/8 — Đậu (trên 5.0).</strong></p>
+
+<h3>Đậu dưới chế độ chấm dễ dãi? <span class="badge badge-pass">✅ ĐẬU RÕ RÀNG</span></h3>
+<p>Phạm vi và tham vọng của dự án, cấu trúc mã sạch, tích hợp thanh toán, và quy trình POS xứng đáng được ghi nhận đáng kể. Các lỗi được ghi nhận nhưng được giảm trừ đáng kể. <strong>6.5/8 — Đậu Mạnh.</strong></p>
+
+<hr>
+
+<h3>Mất điểm lớn nhất:</h3>
+<p>Lỗi trừ kho không lưu trong <code>PosService.CompleteCheckout()</code> — nó vô hiệu hóa tuyên bố rằng hệ thống "tự động cập nhật tồn kho sau mỗi giao dịch."</p>
+
+<h3>Sửa đầu tiên (theo thứ tự):</h3>
+<ol>
+  <li>Thêm lời gọi <code>_bookRepository.UpdateStock()</code> trong <code>PosService.CompleteCheckout()</code></li>
+  <li>Triển khai băm mật khẩu</li>
+  <li>Xuất lại PDF báo cáo với ảnh chụp màn hình nhúng</li>
+  <li>Sửa tuyên bố 10 bảng thành 8</li>
+</ol>
+
+<h3>Kiến trúc có thể bảo trì không? <span class="badge badge-pass">✅ CÓ</span></h3>
+<p>Kiến trúc phân lớp với phân tách interface, mẫu repository và điều phối service thực sự có thể bảo trì. Một lập trình viên mới có thể hiểu cấu trúc trong vòng một giờ. Thêm tính năng mới tuân theo mẫu rõ ràng: DTO → Repository interface → Repository implementation → Service → UI. Service Locator là điểm yếu kiến trúc chính nhưng không gây tử vong ở quy mô này.</p>
+
+<h3>Báo cáo có phản ánh đúng triển khai không? <span class="match-partial">⚠️ MỘT PHẦN</span></h3>
+<p>Báo cáo mô tả chính xác các tính năng, kiến trúc và quyết định thiết kế của hệ thống ở mức cao. Tuy nhiên, các tuyên bố thực tế cụ thể (10 bảng, băm mật khẩu, tương thích đa nền tảng, sao lưu/phục hồi, xuất PDF thực) không khớp với mã nguồn. Báo cáo mô tả những gì nhóm <strong>dự định</strong> xây dựng hơn là những gì <strong>thực sự đã được</strong> xây dựng. Đối với bài nộp học thuật, sự khác biệt giữa tính năng được tuyên bố và được triển khai này là vấn đề tài liệu nghiêm trọng nhất.</p>
+
+<hr>
+
+<p style="text-align:center; color:var(--muted); font-size:0.9em;">
+  <em>Kiểm toán hoàn thành ngày 07/06/2026. Tất cả phát hiện đều dựa trên bằng chứng với tham chiếu tệp:dòng. Không có đánh giá trước nào được tham khảo.</em>
+</p>
+
+</body>
+</html>

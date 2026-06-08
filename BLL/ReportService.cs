@@ -45,12 +45,16 @@ public class ReportService : IReportService
     public ReportSectionDto GetSlowMovingReport(int daysWithoutSales = 90) =>
         _reportRepository.GetSlowMovingReport(daysWithoutSales);
 
+    public ReportSectionDto GetImportReport() =>
+        _reportRepository.GetImportReport();
+
     public IReadOnlyList<ReportSectionDto> GetAllReportSections() =>
     [
         GetRevenueSummary(),
         GetRevenueByPeriodReport("Day"),
         GetBestSellingBooksReport(),
         GetLowStockReport(),
-        GetSlowMovingReport()
+        GetSlowMovingReport(),
+        GetImportReport()
     ];
 }

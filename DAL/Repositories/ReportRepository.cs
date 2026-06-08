@@ -151,4 +151,41 @@ public class ReportRepository : IReportRepository
             Rows        = rows
         };
     }
+
+    public ReportSectionDto GetImportReport()
+    {
+        var rows = new List<List<string>>();
+        using var conn = DbConnectionFactory.Create();
+        conn.Open();
+        using var cmd = new SqlCommand(@"
+            SELECT ir.ImportID,
+                   s.SupplierName,
+                   e.FullName AS EmployeeName,
+                   FORMAT(ir.ImportDate, 'dd/MM/yyyy HH:mm') AS ImportDate,
+                   ir.TotalAmount,
+                   ISNULL(ir.Note, '') AS Note
+            FROM ImportReceipts ir
+            LEFT JOIN Suppliers s ON s.SupplierID = ir.SupplierID
+            LEFT JOIN Employees e ON e.EmployeeID = ir.EmployeeID
+            ORDER BY ir.ImportDate DESC", conn)
+        {
+            CommandTimeout = DbConnectionFactory.CommandTimeout
+        };
+        using var reader = cmd.ExecuteReader();
+        while (reader.Read())
+            rows.Add([
+                reader["ImportID"].ToString()!,
+                reader["SupplierName"].ToString()!,
+                reader["EmployeeName"].ToString()!,
+                reader["ImportDate"].ToString()!,
+                ((decimal)reader["TotalAmount"]).ToString("N2"),
+                reader["Note"].ToString()!
+            ]);
+        return new ReportSectionDto
+        {
+            SectionName = "Import History",
+            Headers     = ["Import ID", "Supplier", "Employee", "Import Date", "Total Amount", "Note"],
+            Rows        = rows
+        };
+    }
 }
