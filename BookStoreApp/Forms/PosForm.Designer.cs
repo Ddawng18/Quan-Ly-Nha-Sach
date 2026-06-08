@@ -141,7 +141,7 @@ partial class PosForm
         // lblMethod
         // 
         lblMethod.AutoSize = true;
-        lblMethod.Location = new Point(488, 80);
+        lblMethod.Location = new Point(488, 204);
         lblMethod.Name = "lblMethod";
         lblMethod.Size = new Size(55, 20);
         lblMethod.TabIndex = 18;
@@ -151,7 +151,8 @@ partial class PosForm
         // 
         cboPaymentMethod.DropDownStyle = ComboBoxStyle.DropDownList;
         cboPaymentMethod.Items.Add("Cash");
-        cboPaymentMethod.Location = new Point(488, 104);
+        cboPaymentMethod.Items.Add("QR Payment");
+        cboPaymentMethod.Location = new Point(488, 228);
         cboPaymentMethod.Name = "cboPaymentMethod";
         cboPaymentMethod.Size = new Size(136, 28);
         cboPaymentMethod.TabIndex = 17;
