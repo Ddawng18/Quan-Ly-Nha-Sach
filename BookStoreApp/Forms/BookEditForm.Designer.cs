@@ -25,22 +25,14 @@ partial class BookEditForm
         txtPublisher = new TextBox();
         lblPublishYear = new Label();
         numPublishYear = new NumericUpDown();
-        lblImportPrice = new Label();
-        numImportPrice = new NumericUpDown();
         lblSellPrice = new Label();
         numSellPrice = new NumericUpDown();
         lblCategory = new Label();
         cboCategory = new ComboBox();
-        lblSupplier = new Label();
-        cboSupplier = new ComboBox();
-        lblQuantity = new Label();
-        numQuantity = new NumericUpDown();
         btnSave = new Button();
         btnCancel = new Button();
         ((System.ComponentModel.ISupportInitialize)numPublishYear).BeginInit();
-        ((System.ComponentModel.ISupportInitialize)numImportPrice).BeginInit();
         ((System.ComponentModel.ISupportInitialize)numSellPrice).BeginInit();
-        ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
         SuspendLayout();
         //
         // lblTitle
@@ -116,22 +108,6 @@ partial class BookEditForm
         numPublishYear.Size = new Size(120, 27);
         numPublishYear.Value = new decimal(new int[] { 2024, 0, 0, 0 });
         //
-        // lblImportPrice
-        //
-        lblImportPrice.AutoSize = true;
-        lblImportPrice.Location = new Point(168, 340);
-        lblImportPrice.Name = "lblImportPrice";
-        lblImportPrice.Size = new Size(89, 20);
-        lblImportPrice.Text = "Import Price";
-        //
-        // numImportPrice
-        //
-        numImportPrice.DecimalPlaces = 2;
-        numImportPrice.Location = new Point(168, 364);
-        numImportPrice.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
-        numImportPrice.Name = "numImportPrice";
-        numImportPrice.Size = new Size(120, 27);
-        //
         // lblSellPrice
         //
         lblSellPrice.AutoSize = true;
@@ -163,43 +139,13 @@ partial class BookEditForm
         cboCategory.Name = "cboCategory";
         cboCategory.Size = new Size(190, 28);
         //
-        // lblSupplier
-        //
-        lblSupplier.AutoSize = true;
-        lblSupplier.Location = new Point(234, 276);
-        lblSupplier.Name = "lblSupplier";
-        lblSupplier.Size = new Size(64, 20);
-        lblSupplier.Text = "Supplier";
-        //
-        // cboSupplier
-        //
-        cboSupplier.DropDownStyle = ComboBoxStyle.DropDownList;
-        cboSupplier.Location = new Point(234, 300);
-        cboSupplier.Name = "cboSupplier";
-        cboSupplier.Size = new Size(190, 28);
-        //
-        // lblQuantity
-        //
-        lblQuantity.AutoSize = true;
-        lblQuantity.Location = new Point(24, 408);
-        lblQuantity.Name = "lblQuantity";
-        lblQuantity.Size = new Size(65, 20);
-        lblQuantity.Text = "Quantity";
-        //
-        // numQuantity
-        //
-        numQuantity.Location = new Point(24, 432);
-        numQuantity.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
-        numQuantity.Name = "numQuantity";
-        numQuantity.Size = new Size(120, 27);
-        //
         // btnSave
         //
         btnSave.BackColor = Color.FromArgb(33, 150, 243);
         btnSave.FlatAppearance.BorderSize = 0;
         btnSave.FlatStyle = FlatStyle.Flat;
         btnSave.ForeColor = Color.White;
-        btnSave.Location = new Point(24, 480);
+        btnSave.Location = new Point(24, 420);
         btnSave.Name = "btnSave";
         btnSave.Size = new Size(120, 40);
         btnSave.Text = "Save";
@@ -208,7 +154,7 @@ partial class BookEditForm
         //
         // btnCancel
         //
-        btnCancel.Location = new Point(160, 480);
+        btnCancel.Location = new Point(160, 420);
         btnCancel.Name = "btnCancel";
         btnCancel.Size = new Size(120, 40);
         btnCancel.Text = "Cancel";
@@ -220,19 +166,13 @@ partial class BookEditForm
         AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
         CancelButton = btnCancel;
-        ClientSize = new Size(454, 540);
+        ClientSize = new Size(454, 480);
         Controls.Add(btnCancel);
         Controls.Add(btnSave);
-        Controls.Add(numQuantity);
-        Controls.Add(lblQuantity);
         Controls.Add(numSellPrice);
         Controls.Add(lblSellPrice);
-        Controls.Add(numImportPrice);
-        Controls.Add(lblImportPrice);
         Controls.Add(numPublishYear);
         Controls.Add(lblPublishYear);
-        Controls.Add(cboSupplier);
-        Controls.Add(lblSupplier);
         Controls.Add(cboCategory);
         Controls.Add(lblCategory);
         Controls.Add(txtPublisher);
@@ -250,9 +190,7 @@ partial class BookEditForm
         StartPosition = FormStartPosition.CenterParent;
         Text = "Book";
         ((System.ComponentModel.ISupportInitialize)numPublishYear).EndInit();
-        ((System.ComponentModel.ISupportInitialize)numImportPrice).EndInit();
         ((System.ComponentModel.ISupportInitialize)numSellPrice).EndInit();
-        ((System.ComponentModel.ISupportInitialize)numQuantity).EndInit();
         ResumeLayout(false);
         PerformLayout();
     }
@@ -267,16 +205,10 @@ partial class BookEditForm
     private TextBox txtPublisher;
     private Label lblPublishYear;
     private NumericUpDown numPublishYear;
-    private Label lblImportPrice;
-    private NumericUpDown numImportPrice;
     private Label lblSellPrice;
     private NumericUpDown numSellPrice;
     private Label lblCategory;
     private ComboBox cboCategory;
-    private Label lblSupplier;
-    private ComboBox cboSupplier;
-    private Label lblQuantity;
-    private NumericUpDown numQuantity;
     private Button btnSave;
     private Button btnCancel;
 }

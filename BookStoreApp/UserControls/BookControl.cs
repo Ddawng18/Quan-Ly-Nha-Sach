@@ -116,20 +116,17 @@ public partial class BookControl : UserControl
         if (dgvBooks.Columns.Count == 0) return;
 
         HideColumn("CategoryID");
-        HideColumn("SupplierID");
 
         var columns = new (string Property, string Header, int Width)[]
         {
-            ("BookID",          "BookID",        70),
-            ("CategoryName",    "CategoryName",  120),
-            ("Title",           "Title",         160),
-            ("Author",          "Author",        130),
-            ("ISBN",            "ISBN",          130),
-            ("Publisher",       "Publisher",     130),
-            ("PublishYear",     "PublishYear",   95),
-            ("ImportPrice",     "ImportPrice",   95),
-            ("SellPrice",       "SellPrice",     95),
-            ("QuantityInStock", "QuantityStock", 105)
+            ("BookID",       "BookID",       70),
+            ("CategoryName", "CategoryName", 120),
+            ("Title",        "Title",        160),
+            ("Author",       "Author",       130),
+            ("ISBN",         "ISBN",         130),
+            ("Publisher",    "Publisher",    130),
+            ("PublishYear",  "PublishYear",  95),
+            ("SellPrice",    "SellPrice",    95),
         };
 
         var displayIndex = 0;
@@ -142,21 +139,10 @@ public partial class BookControl : UserControl
             column.DisplayIndex = displayIndex++;
         }
 
-        if (dgvBooks.Columns["ImportPrice"] is DataGridViewColumn importPrice)
-        {
-            importPrice.DefaultCellStyle.Format    = "N2";
-            importPrice.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-        }
-
         if (dgvBooks.Columns["SellPrice"] is DataGridViewColumn sellPrice)
         {
             sellPrice.DefaultCellStyle.Format    = "N2";
             sellPrice.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-        }
-
-        if (dgvBooks.Columns["QuantityInStock"] is DataGridViewColumn quantity)
-        {
-            quantity.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
         }
     }
 

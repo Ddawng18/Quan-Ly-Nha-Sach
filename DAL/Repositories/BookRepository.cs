@@ -36,14 +36,12 @@ public class BookRepository : IBookRepository
         conn.Open();
         using var cmd = new SqlCommand(@"
             INSERT INTO Books
-                (CategoryID, SupplierID, Title, Author, ISBN, Publisher,
-                 PublishYear, ImportPrice, SellPrice, QuantityInStock,
-                 LastImportDate, LastSoldDate, IsDeleted)
+                (CategoryID, Title, Author, ISBN, Publisher,
+                 PublishYear, SellPrice, IsDeleted)
             OUTPUT INSERTED.BookID
             VALUES
-                (@cat, @sup, @title, @author, @isbn, @pub,
-                 @year, @import, @sell, @qty,
-                 @lastImport, @lastSold, 0)", conn);
+                (@cat, @title, @author, @isbn, @pub,
+                 @year, @sell, 0)", conn);
 
         BindBookParams(cmd, book);
         book.BookID = (int)cmd.ExecuteScalar();
@@ -56,17 +54,12 @@ public class BookRepository : IBookRepository
         using var cmd = new SqlCommand(@"
             UPDATE Books SET
                 CategoryID      = @cat,
-                SupplierID      = @sup,
                 Title           = @title,
                 Author          = @author,
                 ISBN            = @isbn,
                 Publisher       = @pub,
                 PublishYear     = @year,
-                ImportPrice     = @import,
-                SellPrice       = @sell,
-                QuantityInStock = @qty,
-                LastImportDate  = @lastImport,
-                LastSoldDate    = @lastSold
+                SellPrice       = @sell
             WHERE BookID = @id", conn);
 
         BindBookParams(cmd, book);
@@ -102,35 +95,29 @@ public class BookRepository : IBookRepository
     // ── helpers ──────────────────────────────────────────────
     private static void BindBookParams(SqlCommand cmd, Book b)
     {
-        cmd.Parameters.AddWithValue("@cat",       b.CategoryID);
-        cmd.Parameters.AddWithValue("@sup",       b.SupplierID);
-        cmd.Parameters.AddWithValue("@title",     b.Title);
-        cmd.Parameters.AddWithValue("@author",    b.Author);
-        cmd.Parameters.AddWithValue("@isbn",      b.ISBN);
-        cmd.Parameters.AddWithValue("@pub",       b.Publisher);
-        cmd.Parameters.AddWithValue("@year",      b.PublishYear);
-        cmd.Parameters.AddWithValue("@import",    b.ImportPrice);
-        cmd.Parameters.AddWithValue("@sell",      b.SellPrice);
-        cmd.Parameters.AddWithValue("@qty",       b.QuantityInStock);
-        cmd.Parameters.AddWithValue("@lastImport",(object?)b.LastImportDate ?? DBNull.Value);
-        cmd.Parameters.AddWithValue("@lastSold",  (object?)b.LastSoldDate   ?? DBNull.Value);
+        cmd.Parameters.AddWithValue("@cat",    b.CategoryID);
+        cmd.Parameters.AddWithValue("@title",  b.Title);
+        cmd.Parameters.AddWithValue("@author", b.Author);
+        cmd.Parameters.AddWithValue("@isbn",   b.ISBN);
+        cmd.Parameters.AddWithValue("@pub",    b.Publisher);
+        cmd.Parameters.AddWithValue("@year",   b.PublishYear);
+        cmd.Parameters.AddWithValue("@sell",   b.SellPrice);
     }
 
     private static Book MapBook(SqlDataReader r) => new()
     {
         BookID          = (int)r["BookID"],
         CategoryID      = (int)r["CategoryID"],
-        SupplierID      = (int)r["SupplierID"],
         Title           = r["Title"].ToString()!,
         Author          = r["Author"].ToString()!,
         ISBN            = r["ISBN"].ToString()!,
         Publisher       = r["Publisher"]?.ToString() ?? "",
         PublishYear     = r["PublishYear"] == DBNull.Value ? 0 : (int)r["PublishYear"],
-        ImportPrice     = (decimal)r["ImportPrice"],
         SellPrice       = (decimal)r["SellPrice"],
         QuantityInStock = (int)r["QuantityInStock"],
+        ImportPrice     = (decimal)r["ImportPrice"],
         LastImportDate  = r["LastImportDate"] == DBNull.Value ? null : (DateTime?)r["LastImportDate"],
         LastSoldDate    = r["LastSoldDate"]   == DBNull.Value ? null : (DateTime?)r["LastSoldDate"],
-        IsDeleted       = (bool)r["IsDeleted"]
+        IsDeleted       = (bool)r["IsDeleted"],
     };
 }
