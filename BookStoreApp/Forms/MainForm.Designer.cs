@@ -38,9 +38,9 @@ partial class MainForm
         panelSidebar.SuspendLayout();
         panelTopBar.SuspendLayout();
         SuspendLayout();
-        // 
+        //
         // panelSidebar
-        // 
+        //
         panelSidebar.BackColor = Color.FromArgb(31, 41, 55);
         panelSidebar.Controls.Add(btnLogout);
         panelSidebar.Controls.Add(btnEmployees);
@@ -59,9 +59,9 @@ partial class MainForm
         panelSidebar.Padding = new Padding(0, 0, 0, 16);
         panelSidebar.Size = new Size(220, 600);
         panelSidebar.TabIndex = 0;
-        // 
+        //
         // btnLogout
-        // 
+        //
         btnLogout.Dock = DockStyle.Bottom;
         btnLogout.Location = new Point(0, 544);
         btnLogout.Name = "btnLogout";
@@ -72,9 +72,9 @@ partial class MainForm
         btnLogout.FlatAppearance.BorderSize = 0;
         btnLogout.ForeColor = Color.FromArgb(241, 245, 249);
         btnLogout.Click += btnLogout_Click;
-        // 
+        //
         // btnEmployees
-        // 
+        //
         btnEmployees.Dock = DockStyle.Top;
         btnEmployees.Location = new Point(0, 392);
         btnEmployees.Name = "btnEmployees";
@@ -86,9 +86,9 @@ partial class MainForm
         btnEmployees.FlatStyle = FlatStyle.Flat;
         btnEmployees.FlatAppearance.BorderSize = 0;
         btnEmployees.Click += btnEmployees_Click;
-        // 
+        //
         // btnReports
-        // 
+        //
         btnReports.Dock = DockStyle.Top;
         btnReports.Location = new Point(0, 352);
         btnReports.Name = "btnReports";
@@ -100,9 +100,9 @@ partial class MainForm
         btnReports.FlatStyle = FlatStyle.Flat;
         btnReports.FlatAppearance.BorderSize = 0;
         btnReports.Click += btnReports_Click;
-        // 
+        //
         // btnOrders
-        // 
+        //
         btnOrders.Dock = DockStyle.Top;
         btnOrders.Location = new Point(0, 312);
         btnOrders.Name = "btnOrders";
@@ -114,9 +114,9 @@ partial class MainForm
         btnOrders.FlatStyle = FlatStyle.Flat;
         btnOrders.FlatAppearance.BorderSize = 0;
         btnOrders.Click += btnOrders_Click;
-        // 
+        //
         // btnImport
-        // 
+        //
         btnImport.Dock = DockStyle.Top;
         btnImport.Location = new Point(0, 272);
         btnImport.Name = "btnImport";
@@ -128,9 +128,9 @@ partial class MainForm
         btnImport.FlatStyle = FlatStyle.Flat;
         btnImport.FlatAppearance.BorderSize = 0;
         btnImport.Click += btnImport_Click;
-        // 
+        //
         // btnCustomers
-        // 
+        //
         btnCustomers.Dock = DockStyle.Top;
         btnCustomers.Location = new Point(0, 232);
         btnCustomers.Name = "btnCustomers";
@@ -142,9 +142,9 @@ partial class MainForm
         btnCustomers.FlatStyle = FlatStyle.Flat;
         btnCustomers.FlatAppearance.BorderSize = 0;
         btnCustomers.Click += btnCustomers_Click;
-        // 
+        //
         // btnSuppliers
-        // 
+        //
         btnSuppliers.Dock = DockStyle.Top;
         btnSuppliers.Location = new Point(0, 192);
         btnSuppliers.Name = "btnSuppliers";
@@ -156,9 +156,9 @@ partial class MainForm
         btnSuppliers.FlatStyle = FlatStyle.Flat;
         btnSuppliers.FlatAppearance.BorderSize = 0;
         btnSuppliers.Click += btnSuppliers_Click;
-        // 
+        //
         // btnCategories
-        // 
+        //
         btnCategories.Dock = DockStyle.Top;
         btnCategories.Location = new Point(0, 152);
         btnCategories.Name = "btnCategories";
@@ -170,9 +170,9 @@ partial class MainForm
         btnCategories.FlatStyle = FlatStyle.Flat;
         btnCategories.FlatAppearance.BorderSize = 0;
         btnCategories.Click += btnCategories_Click;
-        // 
+        //
         // btnBooks
-        // 
+        //
         btnBooks.Dock = DockStyle.Top;
         btnBooks.Location = new Point(0, 112);
         btnBooks.Name = "btnBooks";
@@ -184,9 +184,9 @@ partial class MainForm
         btnBooks.FlatStyle = FlatStyle.Flat;
         btnBooks.FlatAppearance.BorderSize = 0;
         btnBooks.Click += btnBooks_Click;
-        // 
+        //
         // btnDashboard
-        // 
+        //
         btnDashboard.Dock = DockStyle.Top;
         btnDashboard.Location = new Point(0, 72);
         btnDashboard.Name = "btnDashboard";
@@ -198,9 +198,9 @@ partial class MainForm
         btnDashboard.FlatStyle = FlatStyle.Flat;
         btnDashboard.FlatAppearance.BorderSize = 0;
         btnDashboard.Click += btnDashboard_Click;
-        // 
+        //
         // lblAppTitle
-        // 
+        //
         lblAppTitle.Dock = DockStyle.Top;
         lblAppTitle.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
         lblAppTitle.ForeColor = Color.White;
@@ -210,9 +210,9 @@ partial class MainForm
         lblAppTitle.TabIndex = 0;
         lblAppTitle.Text = "Book Store";
         lblAppTitle.TextAlign = ContentAlignment.MiddleCenter;
-        // 
+        //
         // panelTopBar
-        // 
+        //
         panelTopBar.BackColor = Color.White;
         panelTopBar.Controls.Add(lblUser);
         panelTopBar.Controls.Add(lblPageTitle);
@@ -222,9 +222,9 @@ partial class MainForm
         panelTopBar.Padding = new Padding(16, 0, 16, 0);
         panelTopBar.Size = new Size(980, 56);
         panelTopBar.TabIndex = 1;
-        // 
+        //
         // lblUser
-        // 
+        //
         lblUser.Dock = DockStyle.Right;
         lblUser.ForeColor = Color.FromArgb(107, 114, 128);
         lblUser.Location = new Point(764, 0);
@@ -233,9 +233,9 @@ partial class MainForm
         lblUser.TabIndex = 1;
         lblUser.Text = "Signed in";
         lblUser.TextAlign = ContentAlignment.MiddleRight;
-        // 
+        //
         // lblPageTitle
-        // 
+        //
         lblPageTitle.Dock = DockStyle.Fill;
         lblPageTitle.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
         lblPageTitle.ForeColor = Color.FromArgb(31, 41, 55);
@@ -245,9 +245,9 @@ partial class MainForm
         lblPageTitle.TabIndex = 2;
         lblPageTitle.Text = "Dashboard";
         lblPageTitle.TextAlign = ContentAlignment.MiddleLeft;
-        // 
+        //
         // panelContent
-        // 
+        //
         panelContent.BackColor = Color.FromArgb(243, 244, 246);
         panelContent.Dock = DockStyle.Fill;
         panelContent.Location = new Point(220, 56);
@@ -255,9 +255,9 @@ partial class MainForm
         panelContent.Padding = new Padding(8);
         panelContent.Size = new Size(980, 544);
         panelContent.TabIndex = 2;
-        // 
+        //
         // MainForm
-        // 
+        //
         AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
         BackColor = Color.FromArgb(243, 244, 246);

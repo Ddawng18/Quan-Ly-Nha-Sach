@@ -75,7 +75,7 @@ public partial class MainForm : Form
         LoadControl(new SupplierControl(), "Suppliers");
 
     private void btnImport_Click(object sender, EventArgs e) =>
-        LoadControl(new ImportControl(), "Nhập hàng");
+        LoadControl(new ImportControl(), "Import");
 
     private void btnCustomers_Click(object sender, EventArgs e) =>
         LoadControl(new CustomersControl(), "Customers");
