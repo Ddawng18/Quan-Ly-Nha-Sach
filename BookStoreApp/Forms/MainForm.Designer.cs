@@ -68,6 +68,9 @@ partial class MainForm
         btnLogout.Size = new Size(220, 40);
         btnLogout.TabIndex = 9;
         btnLogout.Text = "Logout";
+        btnLogout.FlatStyle = FlatStyle.Flat;
+        btnLogout.FlatAppearance.BorderSize = 0;
+        btnLogout.ForeColor = Color.FromArgb(241, 245, 249);
         btnLogout.Click += btnLogout_Click;
         // 
         // btnEmployees
@@ -80,6 +83,8 @@ partial class MainForm
         btnEmployees.TabIndex = 8;
         btnEmployees.Text = "Employees";
         btnEmployees.TextAlign = ContentAlignment.MiddleLeft;
+        btnEmployees.FlatStyle = FlatStyle.Flat;
+        btnEmployees.FlatAppearance.BorderSize = 0;
         btnEmployees.Click += btnEmployees_Click;
         // 
         // btnReports
@@ -92,6 +97,8 @@ partial class MainForm
         btnReports.TabIndex = 7;
         btnReports.Text = "Reports";
         btnReports.TextAlign = ContentAlignment.MiddleLeft;
+        btnReports.FlatStyle = FlatStyle.Flat;
+        btnReports.FlatAppearance.BorderSize = 0;
         btnReports.Click += btnReports_Click;
         // 
         // btnOrders
@@ -104,6 +111,8 @@ partial class MainForm
         btnOrders.TabIndex = 6;
         btnOrders.Text = "Orders";
         btnOrders.TextAlign = ContentAlignment.MiddleLeft;
+        btnOrders.FlatStyle = FlatStyle.Flat;
+        btnOrders.FlatAppearance.BorderSize = 0;
         btnOrders.Click += btnOrders_Click;
         // 
         // btnImport
@@ -116,6 +125,8 @@ partial class MainForm
         btnImport.TabIndex = 10;
         btnImport.Text = "Import";
         btnImport.TextAlign = ContentAlignment.MiddleLeft;
+        btnImport.FlatStyle = FlatStyle.Flat;
+        btnImport.FlatAppearance.BorderSize = 0;
         btnImport.Click += btnImport_Click;
         // 
         // btnCustomers
@@ -128,6 +139,8 @@ partial class MainForm
         btnCustomers.TabIndex = 5;
         btnCustomers.Text = "Customers";
         btnCustomers.TextAlign = ContentAlignment.MiddleLeft;
+        btnCustomers.FlatStyle = FlatStyle.Flat;
+        btnCustomers.FlatAppearance.BorderSize = 0;
         btnCustomers.Click += btnCustomers_Click;
         // 
         // btnSuppliers
@@ -140,6 +153,8 @@ partial class MainForm
         btnSuppliers.TabIndex = 4;
         btnSuppliers.Text = "Suppliers";
         btnSuppliers.TextAlign = ContentAlignment.MiddleLeft;
+        btnSuppliers.FlatStyle = FlatStyle.Flat;
+        btnSuppliers.FlatAppearance.BorderSize = 0;
         btnSuppliers.Click += btnSuppliers_Click;
         // 
         // btnCategories
@@ -152,6 +167,8 @@ partial class MainForm
         btnCategories.TabIndex = 3;
         btnCategories.Text = "Categories";
         btnCategories.TextAlign = ContentAlignment.MiddleLeft;
+        btnCategories.FlatStyle = FlatStyle.Flat;
+        btnCategories.FlatAppearance.BorderSize = 0;
         btnCategories.Click += btnCategories_Click;
         // 
         // btnBooks
@@ -164,6 +181,8 @@ partial class MainForm
         btnBooks.TabIndex = 2;
         btnBooks.Text = "Books";
         btnBooks.TextAlign = ContentAlignment.MiddleLeft;
+        btnBooks.FlatStyle = FlatStyle.Flat;
+        btnBooks.FlatAppearance.BorderSize = 0;
         btnBooks.Click += btnBooks_Click;
         // 
         // btnDashboard
@@ -176,6 +195,8 @@ partial class MainForm
         btnDashboard.TabIndex = 1;
         btnDashboard.Text = "Dashboard";
         btnDashboard.TextAlign = ContentAlignment.MiddleLeft;
+        btnDashboard.FlatStyle = FlatStyle.Flat;
+        btnDashboard.FlatAppearance.BorderSize = 0;
         btnDashboard.Click += btnDashboard_Click;
         // 
         // lblAppTitle
