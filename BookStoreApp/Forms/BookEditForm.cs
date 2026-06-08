@@ -7,8 +7,8 @@ public partial class BookEditForm : Form
 {
     private readonly Book? _existingBook;
     private readonly ErrorProvider _errorProvider = new();
+    private readonly IBookService _bookService = ServiceLocator.BookService;
     private readonly ICategoryService _categoryService = ServiceLocator.CategoryService;
-    private readonly ISupplierService _supplierService = ServiceLocator.SupplierService;
 
     public Book Book { get; private set; } = new();
 
@@ -29,18 +29,11 @@ public partial class BookEditForm : Form
         txtISBN.Text = book.ISBN;
         txtPublisher.Text = book.Publisher;
         numPublishYear.Value = ClampNumeric(book.PublishYear, numPublishYear.Minimum, numPublishYear.Maximum);
-        numImportPrice.Value = ClampNumeric(book.ImportPrice, numImportPrice.Minimum, numImportPrice.Maximum);
         numSellPrice.Value = ClampNumeric(book.SellPrice, numSellPrice.Minimum, numSellPrice.Maximum);
-        numQuantity.Value = ClampNumeric(book.QuantityInStock, numQuantity.Minimum, numQuantity.Maximum);
 
         if (book.CategoryID > 0)
         {
             cboCategory.SelectedValue = book.CategoryID;
-        }
-
-        if (book.SupplierID > 0)
-        {
-            cboSupplier.SelectedValue = book.SupplierID;
         }
     }
 
@@ -49,10 +42,6 @@ public partial class BookEditForm : Form
         cboCategory.DisplayMember = nameof(Category.CategoryName);
         cboCategory.ValueMember = nameof(Category.CategoryID);
         cboCategory.DataSource = _categoryService.GetCategories().ToList();
-
-        cboSupplier.DisplayMember = nameof(Supplier.SupplierName);
-        cboSupplier.ValueMember = nameof(Supplier.SupplierID);
-        cboSupplier.DataSource = _supplierService.GetSuppliers().ToList();
     }
 
     private void btnSave_Click(object sender, EventArgs e)
@@ -65,24 +54,17 @@ public partial class BookEditForm : Form
         }
 
         var categoryId = cboCategory.SelectedValue is int catId ? catId : 0;
-        var supplierId = cboSupplier.SelectedValue is int supId ? supId : 0;
 
         Book = new Book
         {
-            BookID = _existingBook?.BookID ?? 0,
-            CategoryID = categoryId,
-            SupplierID = supplierId,
-            Title = txtTitle.Text.Trim(),
-            Author = txtAuthor.Text.Trim(),
-            ISBN = txtISBN.Text.Trim(),
-            Publisher = txtPublisher.Text.Trim(),
+            BookID      = _existingBook?.BookID ?? 0,
+            CategoryID  = categoryId,
+            Title       = txtTitle.Text.Trim(),
+            Author      = txtAuthor.Text.Trim(),
+            ISBN        = txtISBN.Text.Trim(),
+            Publisher   = txtPublisher.Text.Trim(),
             PublishYear = publishYear,
-            ImportPrice = numImportPrice.Value,
-            SellPrice = numSellPrice.Value,
-            QuantityInStock = (int)numQuantity.Value,
-            LastImportDate = _existingBook?.LastImportDate,
-            LastSoldDate = _existingBook?.LastSoldDate,
-            IsDeleted = _existingBook?.IsDeleted ?? false
+            SellPrice   = numSellPrice.Value,
         };
 
         DialogResult = DialogResult.OK;

@@ -116,6 +116,20 @@ public class OrderService : IOrderService
             return ValidationResult.Fail("Paid orders cannot return to pending.");
         }
 
+        // Hoàn lại tồn kho khi hủy đơn (chỉ nếu đơn chưa bị hủy trước đó)
+        if (status == OrderStatus.Cancelled && order.PaymentStatus != OrderStatus.Cancelled)
+        {
+            var details = _orderRepository.GetDetails(orderId);
+            foreach (var detail in details)
+            {
+                var book = _bookRepository.GetById(detail.BookID);
+                if (book is not null)
+                {
+                    _bookRepository.UpdateStock(detail.BookID, book.QuantityInStock + detail.Quantity);
+                }
+            }
+        }
+
         _orderRepository.UpdateStatus(orderId, status);
         return ValidationResult.Ok();
     }

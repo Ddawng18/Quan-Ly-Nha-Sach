@@ -50,7 +50,7 @@ public partial class MainForm : Form
 
     private void HighlightSidebarButton(string pageTitle)
     {
-        foreach (var button in new[] { btnDashboard, btnBooks, btnCategories, btnSuppliers, btnCustomers, btnOrders, btnReports, btnEmployees })
+        foreach (var button in new[] { btnDashboard, btnBooks, btnCategories, btnSuppliers, btnImport, btnCustomers, btnOrders, btnReports, btnEmployees })
         {
             if (!button.Visible)
             {
@@ -66,13 +66,16 @@ public partial class MainForm : Form
         LoadControl(new DashboardControl(), "Dashboard");
 
     private void btnBooks_Click(object sender, EventArgs e) =>
-        LoadControl(new BookControl(IsStaff), "Books");
+        LoadControl(new BookControl(canAdd: true, canEdit: true, canDelete: true), "Books");
 
     private void btnCategories_Click(object sender, EventArgs e) =>
         LoadControl(new CategoryControl(), "Categories");
 
     private void btnSuppliers_Click(object sender, EventArgs e) =>
         LoadControl(new SupplierControl(), "Suppliers");
+
+    private void btnImport_Click(object sender, EventArgs e) =>
+        LoadControl(new ImportControl(), "Import");
 
     private void btnCustomers_Click(object sender, EventArgs e) =>
         LoadControl(new CustomersControl(), "Customers");

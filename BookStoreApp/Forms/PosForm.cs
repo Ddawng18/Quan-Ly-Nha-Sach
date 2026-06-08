@@ -233,4 +233,9 @@ public partial class PosForm : Form
         DialogResult = DialogResult.Cancel;
         Close();
     }
+
+    private void cboLineDiscountType_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+    }
 }
