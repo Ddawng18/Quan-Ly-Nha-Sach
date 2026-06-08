@@ -259,3 +259,5 @@ Khi để trống credentials, hệ thống tự động fallback về **Demo**.
 |----------|----------|---------|
 | `admin` | `1` | Admin (toàn quyền) |
 | `E` | `2` | Staff (POS + xem kho) |
+
+---
