@@ -99,8 +99,6 @@ public class BookService : IBookService
         return ValidationResult.Ok();
     }
 
-    // ── helpers ──────────────────────────────────────────────
-
     private IReadOnlyList<BookViewDto> MapToViews(IEnumerable<Book> books) =>
         books.Select(MapToView).ToList();
 

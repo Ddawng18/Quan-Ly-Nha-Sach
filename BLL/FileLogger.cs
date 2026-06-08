@@ -2,11 +2,6 @@ using System.Text;
 
 namespace BookStoreApp.BLL;
 
-/// <summary>
-/// Lightweight rolling file logger. Writes to logs/bookstore-{yyyy-MM-dd}.log.
-/// Thread-safe via lock.
-/// Copy vào BLL để không cần reference BookStoreApp.Utilities nữa.
-/// </summary>
 internal static class FileLogger
 {
     private static readonly object Lock = new();

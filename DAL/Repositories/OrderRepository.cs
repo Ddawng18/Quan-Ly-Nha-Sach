@@ -58,7 +58,6 @@ public class OrderRepository : IOrderRepository
         using var tran = conn.BeginTransaction();
         try
         {
-            // 1. Insert Order
             using var cmdOrder = new SqlCommand(@"
                 INSERT INTO Orders
                     (CustomerID, EmployeeID, OrderDate, SubtotalAmount, DiscountAmount,
@@ -83,7 +82,6 @@ public class OrderRepository : IOrderRepository
 
             order.OrderID = (int)cmdOrder.ExecuteScalar();
 
-            // 2. Insert OrderDetails
             foreach (var d in details)
             {
                 using var cmdDetail = new SqlCommand(@"
@@ -121,7 +119,6 @@ public class OrderRepository : IOrderRepository
         cmd.ExecuteNonQuery();
     }
 
-    // ── helpers ──────────────────────────────────────────────
     private static IReadOnlyList<OrderViewDto> FetchOrders(DateTime? from, DateTime? to)
     {
         var list = new List<OrderViewDto>();

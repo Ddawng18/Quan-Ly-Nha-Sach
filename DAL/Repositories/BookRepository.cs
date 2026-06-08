@@ -92,7 +92,6 @@ public class BookRepository : IBookRepository
         cmd.ExecuteNonQuery();
     }
 
-    // ── helpers ──────────────────────────────────────────────
     private static void BindBookParams(SqlCommand cmd, Book b)
     {
         cmd.Parameters.AddWithValue("@cat",    b.CategoryID);
