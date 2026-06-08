@@ -9,16 +9,30 @@ public partial class BookControl : UserControl
 {
     private readonly IBookService _bookService = ServiceLocator.BookService;
     private readonly ICategoryService _categoryService = ServiceLocator.CategoryService;
-    private readonly bool _readOnly;
 
+    private readonly bool _canAdd;
+    private readonly bool _canEdit;
+    private readonly bool _canDelete;
+
+    // Constructor mặc định: full quyền (Admin)
     public BookControl()
-        : this(false)
+        : this(canAdd: true, canEdit: true, canDelete: true)
     {
     }
 
+    // Constructor cũ giữ lại để không break code khác
+    // readOnly = true => tất cả đều false
     public BookControl(bool readOnly)
+        : this(canAdd: !readOnly, canEdit: !readOnly, canDelete: !readOnly)
     {
-        _readOnly = readOnly;
+    }
+
+    // Constructor mới: kiểm soát từng quyền riêng
+    public BookControl(bool canAdd, bool canEdit, bool canDelete)
+    {
+        _canAdd    = canAdd;
+        _canEdit   = canEdit;
+        _canDelete = canDelete;
         InitializeComponent();
         LoadFilters();
         ApplyTheme();
@@ -45,9 +59,9 @@ public partial class BookControl : UserControl
         cboStockFilter.SelectedItem = StockLevelFilter.All.ToString();
         cboStockFilter.SelectedIndexChanged += (_, _) => LoadBooks();
 
-        btnAdd.Enabled = !_readOnly;
-        btnEdit.Enabled = !_readOnly;
-        btnDelete.Enabled = !_readOnly;
+        btnAdd.Enabled    = _canAdd;
+        btnEdit.Enabled   = _canEdit;
+        btnDelete.Enabled = _canDelete;
     }
 
     private void ApplyTheme()
@@ -81,7 +95,7 @@ public partial class BookControl : UserControl
         {
             SearchText = txtSearch.Text,
             CategoryId = categoryId,
-            Publisher = publisher,
+            Publisher  = publisher,
             StockLevel = stock
         };
     }
@@ -99,51 +113,44 @@ public partial class BookControl : UserControl
 
     private void ConfigureGridColumns()
     {
-        if (dgvBooks.Columns.Count == 0)
-        {
-            return;
-        }
+        if (dgvBooks.Columns.Count == 0) return;
 
         HideColumn("CategoryID");
         HideColumn("SupplierID");
 
         var columns = new (string Property, string Header, int Width)[]
         {
-            ("BookID", "BookID", 70),
-            ("CategoryName", "CategoryName", 120),
-            ("Title", "Title", 160),
-            ("Author", "Author", 130),
-            ("ISBN", "ISBN", 130),
-            ("Publisher", "Publisher", 130),
-            ("PublishYear", "PublishYear", 95),
-            ("ImportPrice", "ImportPrice", 95),
-            ("SellPrice", "SellPrice", 95),
+            ("BookID",          "BookID",        70),
+            ("CategoryName",    "CategoryName",  120),
+            ("Title",           "Title",         160),
+            ("Author",          "Author",        130),
+            ("ISBN",            "ISBN",          130),
+            ("Publisher",       "Publisher",     130),
+            ("PublishYear",     "PublishYear",   95),
+            ("ImportPrice",     "ImportPrice",   95),
+            ("SellPrice",       "SellPrice",     95),
             ("QuantityInStock", "QuantityStock", 105)
         };
 
         var displayIndex = 0;
         foreach (var (property, header, width) in columns)
         {
-            if (dgvBooks.Columns[property] is not DataGridViewColumn column)
-            {
-                continue;
-            }
-
-            column.Visible = true;
-            column.HeaderText = header;
-            column.Width = width;
+            if (dgvBooks.Columns[property] is not DataGridViewColumn column) continue;
+            column.Visible      = true;
+            column.HeaderText   = header;
+            column.Width        = width;
             column.DisplayIndex = displayIndex++;
         }
 
         if (dgvBooks.Columns["ImportPrice"] is DataGridViewColumn importPrice)
         {
-            importPrice.DefaultCellStyle.Format = "N2";
+            importPrice.DefaultCellStyle.Format    = "N2";
             importPrice.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
         }
 
         if (dgvBooks.Columns["SellPrice"] is DataGridViewColumn sellPrice)
         {
-            sellPrice.DefaultCellStyle.Format = "N2";
+            sellPrice.DefaultCellStyle.Format    = "N2";
             sellPrice.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
         }
 
@@ -156,28 +163,20 @@ public partial class BookControl : UserControl
     private void HideColumn(string name)
     {
         if (dgvBooks.Columns[name] is DataGridViewColumn column)
-        {
             column.Visible = false;
-        }
     }
 
     private Book? GetSelectedBook()
     {
         if (dgvBooks.CurrentRow?.DataBoundItem is BookViewDto view)
-        {
             return _bookService.GetBook(view.BookID);
-        }
-
         return null;
     }
 
     private void btnAdd_Click(object sender, EventArgs e)
     {
         using var form = new BookEditForm();
-        if (form.ShowDialog(FindForm()) != DialogResult.OK)
-        {
-            return;
-        }
+        if (form.ShowDialog(FindForm()) != DialogResult.OK) return;
 
         var result = _bookService.AddBook(form.Book);
         if (!result.IsValid)
@@ -207,10 +206,7 @@ public partial class BookControl : UserControl
         }
 
         using var form = new BookEditForm(book);
-        if (form.ShowDialog(FindForm()) != DialogResult.OK)
-        {
-            return;
-        }
+        if (form.ShowDialog(FindForm()) != DialogResult.OK) return;
 
         var result = _bookService.UpdateBook(form.Book);
         if (!result.IsValid)
@@ -237,10 +233,7 @@ public partial class BookControl : UserControl
             MessageBoxButtons.YesNo,
             MessageBoxIcon.Question);
 
-        if (confirm != DialogResult.Yes)
-        {
-            return;
-        }
+        if (confirm != DialogResult.Yes) return;
 
         var result = _bookService.DeleteBook(selected.BookID);
         if (!result.IsValid)
@@ -255,9 +248,9 @@ public partial class BookControl : UserControl
     private void btnRefresh_Click(object sender, EventArgs e)
     {
         txtSearch.Clear();
-        cboCategoryFilter.SelectedIndex = 0;
+        cboCategoryFilter.SelectedIndex  = 0;
         cboPublisherFilter.SelectedIndex = 0;
-        cboStockFilter.SelectedItem = StockLevelFilter.All.ToString();
+        cboStockFilter.SelectedItem      = StockLevelFilter.All.ToString();
         LoadBooks();
     }
 }

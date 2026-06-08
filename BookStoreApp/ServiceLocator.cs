@@ -21,6 +21,7 @@ public static class ServiceLocator
     private static readonly IAccountRepository   AccountRepo   = new AccountRepository();
     private static readonly IDashboardRepository DashboardRepo = new DashboardRepository();
     private static readonly IReportRepository    ReportRepo    = new ReportRepository();
+    private static readonly IImportRepository    ImportRepo    = new ImportRepository();
 
     // Shared service instances
     private static readonly ILoyaltyService LoyaltySvc = new LoyaltyService();
@@ -37,6 +38,7 @@ public static class ServiceLocator
     public static ISupplierService  SupplierService  { get; }
     public static IAuthService      AuthService      { get; }
     public static IDashboardService DashboardService { get; }
+    public static IImportService    ImportService    { get; }
 
     static ServiceLocator()
     {
@@ -52,5 +54,6 @@ public static class ServiceLocator
         SupplierService  = new SupplierService(SupplierRepo);
         AuthService      = new AuthService(AccountRepo);
         DashboardService = new DashboardService(DashboardRepo);
+        ImportService    = new ImportService(ImportRepo, BookRepo);
     }
 }

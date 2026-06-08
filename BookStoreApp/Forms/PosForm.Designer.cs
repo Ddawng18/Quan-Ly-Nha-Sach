@@ -141,24 +141,24 @@ partial class PosForm
         // lblMethod
         // 
         lblMethod.AutoSize = true;
-        lblMethod.Location = new Point(488, 80);
+        lblMethod.Location = new Point(462, 205);
         lblMethod.Name = "lblMethod";
-        lblMethod.Size = new Size(55, 20);
+        lblMethod.Size = new Size(61, 20);
         lblMethod.TabIndex = 18;
         lblMethod.Text = "Method";
         // 
         // cboPaymentMethod
         // 
         cboPaymentMethod.DropDownStyle = ComboBoxStyle.DropDownList;
-        cboPaymentMethod.Items.Add("Cash");
-        cboPaymentMethod.Location = new Point(488, 104);
+        cboPaymentMethod.Items.AddRange(new object[] { "Cash" });
+        cboPaymentMethod.Location = new Point(462, 228);
         cboPaymentMethod.Name = "cboPaymentMethod";
         cboPaymentMethod.Size = new Size(136, 28);
         cboPaymentMethod.TabIndex = 17;
         // 
         // btnAddLine
         // 
-        btnAddLine.Location = new Point(480, 100);
+        btnAddLine.Location = new Point(485, 99);
         btnAddLine.Name = "btnAddLine";
         btnAddLine.Size = new Size(64, 32);
         btnAddLine.TabIndex = 16;
@@ -167,7 +167,7 @@ partial class PosForm
         // 
         // btnRemoveLine
         // 
-        btnRemoveLine.Location = new Point(552, 100);
+        btnRemoveLine.Location = new Point(555, 99);
         btnRemoveLine.Name = "btnRemoveLine";
         btnRemoveLine.Size = new Size(72, 32);
         btnRemoveLine.TabIndex = 15;
@@ -190,6 +190,7 @@ partial class PosForm
         cboLineDiscountType.Name = "cboLineDiscountType";
         cboLineDiscountType.Size = new Size(132, 28);
         cboLineDiscountType.TabIndex = 13;
+        cboLineDiscountType.SelectedIndexChanged += cboLineDiscountType_SelectedIndexChanged;
         // 
         // numLineDiscount
         // 
@@ -324,7 +325,7 @@ partial class PosForm
         // 
         // PosForm
         // 
-        ClientSize = new Size(644, 640);
+        ClientSize = new Size(647, 640);
         Controls.Add(btnPayWithQr);
         Controls.Add(btnCancel);
         Controls.Add(btnSave);
