@@ -190,8 +190,7 @@ partial class PosForm
         cboLineDiscountType.Name = "cboLineDiscountType";
         cboLineDiscountType.Size = new Size(132, 28);
         cboLineDiscountType.TabIndex = 13;
-        cboLineDiscountType.SelectedIndexChanged += cboLineDiscountType_SelectedIndexChanged;
-        // 
+        //
         // numLineDiscount
         // 
         numLineDiscount.DecimalPlaces = 2;
